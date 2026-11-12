@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 410" width="1000" height="410" role="img" aria-label="NORTH FORM landing page source design artboard with spacing, colors and type annotations">
+<rect width="1000" height="410" fill="#e9ede6"/>
+<rect x="45" y="30" width="650" height="350" rx="17" fill="#fafaf6" stroke="#d5ddd2"/>
+<text x="76" y="68" font-family="Arial,sans-serif" font-size="17" font-weight="bold" fill="#25372b">NORTH / FORM</text>
+<text x="590" y="68" font-family="Arial,sans-serif" font-size="12" fill="#698074">↗</text>
+<path d="M76 85H662" stroke="#dbe2d8"/>
+<text x="76" y="133" font-family="Arial,sans-serif" letter-spacing="2" font-size="10" font-weight="bold" fill="#466d4b">THE ART OF SIMPLICITY</text>
+<g fill="#25382b" font-family="Arial,sans-serif" font-size="40" font-weight="bold"><text x="75" y="190">Make room</text><text x="75" y="234">for better</text><text x="75" y="278">thinking.</text></g>
+<rect x="75" y="310" width="155" height="38" rx="9" fill="#45634c"/><text x="92" y="334" fill="white" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Explore collection ↗</text>
+<rect x="413" y="112" width="247" height="237" rx="16" fill="#e4e7df"/>
+<path d="M464 286L450 327M593 286L610 327M487 293V327M566 293V327" stroke="#82715e" stroke-width="8" stroke-linecap="round"/>
+<rect x="445" y="157" width="180" height="142" rx="61" fill="#c7b79e"/><rect x="460" y="166" width="152" height="121" rx="56" fill="#e2d8c8"/><path d="M449 279q87-18 174 0v31q-87 14-174 0Z" fill="#b99f7f"/>
+<g font-family="Arial,sans-serif"><text x="747" y="57" font-size="14" font-weight="bold" fill="#284030">DESIGN SPEC / 001</text><text x="747" y="89" font-size="11" fill="#63796b">Reference artboard</text><rect x="747" y="107" width="28" height="28" rx="6" fill="#45634c"/><text x="787" y="125" font-size="12" fill="#3d5446">#45634c</text><text x="747" y="172" font-size="11" font-weight="bold" fill="#3d5446">Spacing</text><text x="747" y="194" font-size="12" fill="#687b70">24px base</text><text x="747" y="233" font-size="11" font-weight="bold" fill="#3d5446">Corner radius</text><text x="747" y="255" font-size="12" fill="#687b70">16px base</text><text x="747" y="294" font-size="11" font-weight="bold" fill="#3d5446">Typography</text><text x="747" y="316" font-size="12" fill="#687b70">Bold / 40px / 1.2</text><text x="747" y="357" font-size="10" fill="#8a9a8f">SVG · WEB-READY VECTOR</text></g>
+</svg>

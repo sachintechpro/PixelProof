@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: pixelproof
+    runtime: node
+    plan: free
+    buildCommand: echo "Zero-dependency build; static assets are versioned"
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production

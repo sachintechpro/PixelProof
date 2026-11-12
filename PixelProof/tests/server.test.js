@@ -1,0 +1,15 @@
+'use strict';
+const test = require('node:test');const assert = require('node:assert/strict');const http = require('node:http');const {handler}=require('../server');
+let server,base;
+test.before(async()=>{server=http.createServer(handler);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;});
+test.after(async()=>{await new Promise(resolve=>server.close(resolve));});
+test('health returns service status',async()=>{const r=await fetch(base+'/api/health');const x=await r.json();assert.equal(r.status,200);assert.equal(x.ok,true);});
+test('products search and sort',async()=>{const r=await fetch(base+'/api/products?category=Audio&sort=price-asc');const x=await r.json();assert.equal(x.total,2);assert.ok(x.products[0].price<=x.products[1].price);});
+test('search suggestions only match query',async()=>{const x=await (await fetch(base+'/api/suggest?q=lamp')).json();assert.equal(x.suggestions[0].id,'arc-lamp');});
+test('error simulation returns 503',async()=>{const r=await fetch(base+'/api/suggest?q=a&simulate=error');assert.equal(r.status,503);});
+test('checkout rejects invalid input',async()=>{const r=await fetch(base+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'bad',items:[{id:'arc-lamp',qty:1}]})});assert.equal(r.status,422);});
+test('checkout calculates on trusted server prices',async()=>{const r=await fetch(base+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'dev@example.com',items:[{id:'arc-lamp',qty:2,price:1}]})});const x=await r.json();assert.equal(x.subtotal,258);assert.equal(x.shipping,0);assert.equal(x.simulation,true);});
+test('checkout rejects null payload',async()=>{const r=await fetch(base+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:'null'});assert.equal(r.status,422);});
+test('asset HEAD provides content size',async()=>{const r=await fetch(base+'/assets/lamp.svg',{method:'HEAD'});assert.equal(r.status,200);assert.ok(Number(r.headers.get('content-length'))>0);});
+test('path traversal and unknown path cannot expose files',async()=>{const r=await fetch(base+'/private-file.txt');assert.equal(r.status,404);});
+test('homepage served',async()=>{const r=await fetch(base+'/');assert.equal(r.status,200);assert.match(await r.text(),/PixelProof/);});
