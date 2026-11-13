@@ -346,3 +346,87 @@
  .product-detail-disclaimer{padding:0 18px 18px}
 }
 @media(max-width:360px){.product-detail-heading .eyebrow{font-size:9px;letter-spacing:.6px}.product-detail-gallery{padding:10px}.product-detail-buy{padding:14px}}
+
+
+/* Amazon-inspired, PixelProof-branded storefront detail experience */
+.amazon-product-modal{width:min(1160px,calc(100vw - 24px));max-width:1160px;max-height:94dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:12px;background:#fff}
+.amazon-breadcrumb{padding:20px 60px 12px 25px;font-size:12px;color:#5b6f62}
+.amazon-breadcrumb span{padding:0 8px;color:#a0a8a3}
+.amazon-product-main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.25fr) minmax(215px,.75fr);gap:24px;align-items:start;padding:8px 25px 26px}
+.amazon-gallery{min-width:0;position:sticky;top:0}
+.amazon-image-frame{background:#e4e8e8;border-radius:10px;overflow:hidden;display:grid;place-items:center;aspect-ratio:1/1.12}
+.amazon-image-frame img{width:100%;height:100%;max-height:410px;object-fit:contain}
+.amazon-gallery-caption{margin-top:8px;color:#839087;text-align:center;font-size:11px}
+.amazon-product-information{min-width:0}
+.amazon-store-name{color:#347382;font-size:12px;font-weight:700}
+.amazon-product-information h2{font:700 clamp(24px,2.5vw,32px)/1.24 Manrope,sans-serif;letter-spacing:-.8px;margin:7px 0 12px}
+.amazon-rating{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#627267}
+.amazon-stars,.amazon-review strong span{color:#d48b12;font-size:17px;letter-spacing:-1.2px}
+.amazon-rating a{color:#26738a;text-decoration:underline;cursor:pointer}
+.amazon-hr{height:1px;background:#e4e8e4;margin:15px 0}
+.amazon-old-price{color:#7e8a81;font-size:11px;margin-bottom:4px}
+.amazon-main-price{font:800 30px Manrope,sans-serif;letter-spacing:-.7px}
+.amazon-tax-note{font-size:11px;color:#758379}
+.amazon-description{font-size:13px;line-height:1.7;color:#4f6155;margin:0 0 17px}
+.amazon-product-information h3{font-size:15px;letter-spacing:-.2px;margin:15px 0 8px}
+.amazon-feature-list{margin:0 0 19px;padding-left:20px;font-size:12px;line-height:1.7;color:#4a5a4f}
+.amazon-feature-list li{padding-bottom:5px}
+.amazon-spec-table{width:100%;border-collapse:collapse;font-size:11px;text-align:left}
+.amazon-spec-table th,.amazon-spec-table td{border-bottom:1px solid #e7ece7;padding:9px 7px;vertical-align:top}
+.amazon-spec-table th{background:#f5f7f4;width:42%;font-weight:700;color:#4e6053}
+.amazon-spec-table td{overflow-wrap:anywhere}
+.amazon-spec-note{font-size:11px;color:#77887b;line-height:1.5;margin-top:10px}
+.amazon-buy-box{border:1px solid #d8e0d8;border-radius:11px;padding:18px 16px;min-width:0}
+.amazon-buy-price{font:800 26px Manrope,sans-serif}
+.amazon-buy-box>p{font-size:12px;color:#4c6254;line-height:1.6;margin:13px 0}
+.amazon-buy-box>p strong{color:#2a7453}
+.amazon-buy-stock{font-size:19px;font-weight:750;color:#2c7458;margin:13px 0 2px}
+.amazon-buy-stock.soldout{color:#a44a3b}
+.amazon-buy-box>small{font-size:11px;color:#78887b}
+.amazon-buy-actions{display:grid;gap:9px;margin:19px 0}
+.amazon-cart-button,.amazon-buy-button{width:100%;min-height:42px;border-radius:22px;padding:11px 12px;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid transparent;font-size:12px;font-weight:750}
+.amazon-cart-button{background:#f4cf67;color:#27352c}.amazon-cart-button:hover{background:#e9bc44}
+.amazon-buy-button{background:#e6a165;color:#25382c}.amazon-buy-button:hover{background:#d98e4e}
+.amazon-buy-actions button:disabled{opacity:.5;cursor:not-allowed}
+.amazon-buy-meta{border-top:1px solid #e6eae5;padding-top:11px}
+.amazon-buy-meta>div{display:grid;grid-template-columns:83px 1fr;gap:7px;margin:8px 0;font-size:10px}
+.amazon-buy-meta span{color:#7d897f}.amazon-buy-meta b{font-weight:700;overflow-wrap:anywhere}
+.amazon-buyer-note{font-size:10px!important;color:#8b948c!important;margin-bottom:0!important}
+.amazon-below{border-top:1px solid #e8ede9;padding:26px 25px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.amazon-below h3,.amazon-recommendations h3{font-size:20px;letter-spacing:-.4px;margin:0 0 12px}
+.amazon-below h3 span{font-size:12px;color:#7a8b7e;font-weight:500}
+.amazon-below p{font-size:12px;color:#5c7061;line-height:1.7}
+.amazon-review{border-bottom:1px solid #e9eee9;padding:9px 0}
+.amazon-review strong{font-size:12px;display:flex;align-items:center;gap:8px}
+.amazon-review p{margin:5px 0}
+.amazon-review small{font-size:10px;color:#829285}
+.amazon-recommendations{border-top:1px solid #e8ede9;padding:26px 25px}
+.amazon-recommendation-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.amazon-recommendation{display:flex;flex-direction:column;text-align:left;gap:6px;border:1px solid #e1e8e0;border-radius:9px;background:#fff;padding:10px;min-width:0}
+.amazon-recommendation:hover{border-color:#98b2a2;background:#f7faf5}
+.amazon-recommendation img{width:100%;aspect-ratio:1.25;object-fit:contain;background:#e7eae8;border-radius:6px}
+.amazon-recommendation strong{font-size:12px;line-height:1.4}
+.amazon-recommendation span{font-size:13px;font-weight:800}
+.amazon-product-footer{padding:14px 25px 21px;border-top:1px solid #e9eee9;color:#809084;font-size:11px}
+@media(max-width:900px){
+ .amazon-product-main{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+ .amazon-buy-box{grid-column:2}
+ .amazon-gallery{grid-row:1 / span 2;position:static}
+ .amazon-product-information{grid-column:2}
+ .amazon-image-frame{aspect-ratio:1}
+}
+@media(max-width:600px){
+ .amazon-product-modal{max-height:96dvh;width:calc(100vw - 16px);border-radius:12px}
+ .amazon-breadcrumb{padding:17px 60px 12px 15px;font-size:10px}
+ .amazon-product-main{display:flex;flex-direction:column;padding:7px 15px 20px;gap:16px}
+ .amazon-gallery,.amazon-product-information,.amazon-buy-box{width:100%}
+ .amazon-image-frame{aspect-ratio:1.25}
+ .amazon-image-frame img{max-height:260px}
+ .amazon-product-information h2{font-size:24px}
+ .amazon-buy-box{padding:15px}
+ .amazon-below{display:block;padding:22px 15px}
+ .amazon-below>div+div{margin-top:22px}
+ .amazon-recommendations{padding:22px 15px}
+ .amazon-recommendation-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .amazon-product-footer{padding:14px 15px 20px}
+}
