@@ -3,7 +3,7 @@
 
 **Built to the pixel. Proven in the browser.**
 
-PixelProof is a responsive, interactive engineering showcase for a frontend developer role. It is not a collection of static screenshots or a slide deck: employers can use a working storefront, modify CSS on screen, interact with a real React component, exercise a jQuery API flow, and execute browser smoke checks.
+PixelProof is a responsive, interactive engineering showcase for a frontend developer role. It is not a collection of static screenshots or a slide deck: employers can use a working storefront, operate a connected commerce administration console, modify CSS on screen, interact with a real React component, exercise a jQuery API flow, and execute browser smoke checks.
 
 ![PixelProof overview](screenshots/home-desktop.png)
 
@@ -11,7 +11,7 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 >
 > **Source review:** See [Five-minute review guide](docs/REVIEW_GUIDE.md).
 
-## Four interactive modules
+## Five interactive modules
 
 | Module | What to try | Implementation evidence |
 |---|---|---|
@@ -19,6 +19,7 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 | **Design studio** | Responsive preview, adjustable design tokens, grid overlay, CSS export, design handoff SVG | `public/styles.css`, `public/assets/design-brief.svg` |
 | **Interaction lab** | jQuery AJAX search with error states, custom plugin, React feature configurator, validation, Bootstrap grid | `public/jquery.characterBudget.js`, `public/react-lab.js` |
 | **Quality bench** | Run six live checks against API, assets, responsive rules, semantics | `public/app.js`, `tests/server.test.js`, `.github/workflows/ci.yml` |
+| **Commerce admin** | Create and edit products, upload optimized product images, manage visibility/SKU/inventory, process orders, cancel and restore stock, reset personal demo | `public/admin.js`, `commerce.js`, `server.js`, `tests/commerce.test.js` |
 
 ![Storefront](screenshots/store-desktop.png)
 
@@ -40,7 +41,7 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 
 **Version control / automation:** repository-ready source layout, `.gitignore`, and a GitHub Actions workflow running syntax and API tests.
 
-**eCommerce interface:** interactive product catalog, cart state, validation, no deceptive real-payment integration.
+**eCommerce interface:** connected product CRUD, browser-side image optimization, inventory reservations, fulfillment-state validation, product status and sample order history, with no real-payment integration.
 
 **Images:** original local SVG product illustrations, `loading="lazy"` where appropriate, explicit dimensions on product images.
 
@@ -57,7 +58,14 @@ Browser (HTML5 + CSS3 + ES6+ JavaScript + jQuery + React + Bootstrap)
               +-- GET /api/products?category=Audio&sort=price-asc&q=
               +-- GET /api/suggest?q=lamp
               +-- GET /api/suggest?q=lamp&simulate=error  [returns HTTP 503]
-              +-- POST /api/orders                      [simulated]
+              +-- POST /api/orders                     [sample order + stock reservation]
+              +-- GET /api/admin/overview
+              +-- GET/POST /api/admin/products
+              +-- PATCH/DELETE /api/admin/products/:id
+              +-- GET /api/admin/orders
+              +-- PATCH /api/admin/orders/:id           [valid fulfillment transitions]
+              +-- POST /api/admin/reset                [restore personal workspace]
+              +-- Isolated JSON workspace per browser (server-side)
               +-- Static assets + JS/CSS (locally served)
 ```
 
@@ -80,11 +88,11 @@ npm test
 npm run check
 ```
 
-There is no `npm install` step and no API keys. Local data is sample-only. The `PORT` environment variable is respected for deployment.
+There is no `npm install` step and no API keys. Local data is sample-only. Each browser receives a random, HttpOnly cookie identifying an **isolated demo workspace**, which is saved under `.local-data/` (excluded from Git). You can override its directory with `PIXELPROOF_DATA_DIR`. The `PORT` environment variable is respected for deployment. **On Render Free, filesystem storage is ephemeral and may reset after restart/redeploy**; permanent production storage requires a durable database or persistent disk.
 
 ## Deploy on Render
 
-1. Create a **new public GitHub repository**, `PixelProof`, and upload the **contents of this folder** to the repository root. Make sure `server.js`, `package.json`, `public/`, `.github/`, and `render.yaml` are at the root.
+1. Use the public GitHub repository `sachintechpro/PixelProof`, and upload the **contents of this updated folder** to its root, replacing matching existing files. Make sure `server.js`, `commerce.js`, `package.json`, `public/`, `.github/`, and `render.yaml` are at the root.
 2. In Render, select **New → Web Service**, and connect your new GitHub repository.
 3. Configure **Runtime: Node**, **Build Command: `echo "no build required"`**, **Start Command: `node server.js`**, **Health Check Path: `/api/health`**, and the **Free** plan if available. Leave the root directory at repository root. Render sets `PORT` automatically.
 4. Deploy. Once healthy, paste the Render URL into the **Live URL** field above and your GitHub repository description.
@@ -96,21 +104,27 @@ To publish with git from an extracted folder:
 ```bash
 git init
 git add .
-git commit -m "Create interactive frontend engineering portfolio"
+git commit -m "Add connected commerce administration console"
 git branch -M main
 git remote add origin https://github.com/sachintechpro/PixelProof.git
 git push -u origin main
 ```
 
-Create the empty repository on GitHub first. Do not add an extra auto-generated README there if you want the push to be straightforward.
+If the remote repository already has commits, clone it first and copy the updated project files into that clone before committing and pushing. Do not force-push or overwrite unrelated work.
 
 ## Important integrity notes
 
-- Sample products and checkout are **demonstrations**. The server validates orders and calculates totals, but it **does not** charge cards, send emails, or persist orders. Sample order IDs are generated in memory.
+- Sample products and checkout are **demonstrations**. The server validates orders and prices, records a **sample order** in a per-browser JSON workspace, and reserves/restores inventory as needed. It does **not** charge cards, collect payment information, email customers, or create real orders. Sample customer emails are validated but intentionally **not retained**.
+- The admin console is **not a production-secured admin system**. This public review lab intentionally gives each visitor a separate sandbox workspace, with no access to other visitors’ data. For real commerce, add authentication, authorization, a durable database, audit logs, and payment integrations.
+- **Render Free storage is ephemeral.** The per-browser JSON records survive normal page reloads and local process restarts but cannot be promised across free-service redeploys or instance replacement.
 - The design handoff reference is an **original SVG**, not a supplied Photoshop PSD. This project does not assert Photoshop, Illustrator, or Fireworks work experience.
 - The in-browser checks do **not** prove testing in Firefox, Safari, or Edge. See the [manual QA plan](docs/MANUAL_QA.md) for an honest cross-browser test matrix.
 - Preferred but unimplemented platforms (WordPress, Shopify, BigCommerce, Magento, PHP, MySQL) are intentionally not presented as integrated systems.
 - AI-assisted coding may accelerate development; review and validation of generated work remain necessary. This repository includes testable code rather than claims of AI proficiency.
+
+## Commerce admin walkthrough
+
+See [Commerce admin technical guide](docs/COMMERCE_ADMIN.md) for API, validation, and storage design, and [Five-minute review guide](docs/REVIEW_GUIDE.md) for an employer-friendly demonstration.
 
 ## Screenshots
 
