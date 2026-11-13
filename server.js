@@ -5,6 +5,8 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const commerce = require('./commerce');
 const adminAuth = require('./admin-auth');
+const qaLive = require('./qa-live-runner');
+const qaLimits = new Map();
 const PORT = Number(process.env.PORT) || 3000;
 const PUBLIC = path.resolve(__dirname, 'public');
 const MIME = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.svg':'image/svg+xml', '.json':'application/json; charset=utf-8', '.png':'image/png', '.ico':'image/x-icon', '.txt':'text/plain; charset=utf-8' };
@@ -18,6 +20,24 @@ async function handler(req,res){
     if(pathname.startsWith('/api/')){
       if(!['GET','POST','PATCH','DELETE'].includes(req.method))return sendJSON(res,405,{error:'Method not allowed.'});
       if(req.method!=='GET')checkOrigin(req);
+      // Public QA endpoints: fixed, harmless test catalog and isolated in-memory
+      // execution. Never executes arbitrary code, modifies live orders, or uses secrets.
+      if(pathname==='/api/qa/catalog'&&req.method==='GET')
+        return sendJSON(res,200,{version:'3.3',isolated:true,tests:qaLive.publicCatalog});
+      if(pathname==='/api/qa/run'&&req.method==='POST'){
+        const addr=String(req.socket.remoteAddress||'unknown');const now=Date.now();
+        const bucket=qaLimits.get(addr)||{at:now,count:0};
+        if(now-bucket.at>60000){bucket.at=now;bucket.count=0;}
+        bucket.count++;qaLimits.set(addr,bucket);
+        if(bucket.count>240)return sendJSON(res,429,{error:'QA test runner rate limit. Retry in a minute.'});
+        const body=await readBody(req);
+        if(!body||!Array.isArray(body.ids)||body.ids.length>qaLive.publicCatalog.length||body.ids.some(id=>typeof id!=='string'||id.length>20))
+          return sendJSON(res,422,{error:'Provide an array of supported QA test IDs.'});
+        const allowed=new Set(qaLive.publicCatalog.map(x=>x.id));
+        if(body.ids.some(id=>!allowed.has(id)))return sendJSON(res,422,{error:'Unknown QA test ID.'});
+        const results=await qaLive.execute([...new Set(body.ids)]);
+        return sendJSON(res,200,{isolated:true,runAt:new Date().toISOString(),runId:'QA-'+crypto.randomBytes(4).toString('hex').toUpperCase(),results,summary:{run:results.length,passed:results.filter(r=>r.status==='passed').length,failed:results.filter(r=>r.status==='failed').length}});
+      }
       const s=await commerce.workspace(req,res);const d=s.data;
       if(pathname==='/api/admin/session'&&req.method==='GET')return sendJSON(res,200,{authenticated:adminAuth.isAuthenticated(req,s),userId:adminAuth.isAuthenticated(req,s)?adminAuth.DEMO_USERNAME:null});
       if(pathname==='/api/admin/login'&&req.method==='POST'){
@@ -26,7 +46,7 @@ async function handler(req,res){
       if(pathname==='/api/admin/logout'&&req.method==='POST'){
         adminAuth.logout(req,res);return sendJSON(res,200,{authenticated:false});}
       if(pathname.startsWith('/api/admin/')&&!adminAuth.isAuthenticated(req,s))return sendJSON(res,401,{error:'Admin sign-in required.'});
-      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'3.2.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin','demo-admin-login','test-payment-checkout','printable-demo-labels','dispatch-verification','shared-fictional-orders','quality-command-center']});
+      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'3.3.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin','demo-admin-login','test-payment-checkout','printable-demo-labels','dispatch-verification','shared-fictional-orders','interactive-test-workbench']});
       if(pathname==='/api/products'&&req.method==='GET'){
         const records=commerce.listProducts(s,url.searchParams);return sendJSON(res,200,{products:records,total:records.length,query:url.searchParams.get('q')||'',elapsedMs:Math.round(performance.now()-started)});}
       if(pathname==='/api/suggest'&&req.method==='GET'){

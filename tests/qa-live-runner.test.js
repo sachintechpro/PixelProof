@@ -1,0 +1,16 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const http=require('node:http');
+const runner=require('../qa-live-runner');
+const {handler}=require('../server');
+let server,base;
+test.before(async()=>{server=http.createServer(handler);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;});
+test.after(async()=>await new Promise(resolve=>server.close(resolve)));
+test('runnable QA catalog has unique Unit/SIT/UAT cases',()=>{const all=runner.publicCatalog;assert.ok(all.length>=35);assert.equal(new Set(all.map(x=>x.id)).size,all.length);for(const k of ['Unit','SIT','UAT'])assert.ok(all.filter(c=>c.level===k).length>=9,k);});
+test('full isolated QA runner gives evidence for every passing case',async()=>{const results=await runner.execute(runner.publicCatalog.map(c=>c.id));const failures=results.filter(r=>r.status!=='passed');assert.deepEqual(failures.map(f=>({id:f.id,error:f.error})),[]);assert.equal(results.length,runner.publicCatalog.length);for(const result of results){assert.ok(result.expected);assert.ok(result.assertion);assert.ok(result.request);assert.ok(result.response);assert.ok(Number.isFinite(result.elapsedMs));}});
+test('runnable tests are repeatable and do not modify public catalog',async()=>{const a=await runner.execute(['SIT-01','UAT-03','SIT-10']),b=await runner.execute(['SIT-01','UAT-03','SIT-10']);assert.ok(a.every(x=>x.status==='passed'));assert.ok(b.every(x=>x.status==='passed'));});
+test('GET /api/qa/catalog returns suite definitions, no executable source',async()=>{const r=await fetch(base+'/api/qa/catalog');assert.equal(r.status,200);const j=await r.json();assert.equal(j.tests.length,runner.publicCatalog.length);assert.equal(j.isolated,true);assert.ok(j.tests.every(x=>!('run' in x)));});
+test('POST /api/qa/run returns actual business proof and summary',async()=>{const r=await fetch(base+'/api/qa/run',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({ids:['UT-11','SIT-02','UAT-03']})});assert.equal(r.status,200);const j=await r.json();assert.equal(j.summary.run,3);assert.equal(j.summary.failed,0);assert.equal(j.results.length,3);assert.equal(j.isolated,true);assert.ok(j.runId.startsWith('QA-'));});
+test('QA endpoint rejects unsupported test ID instead of evaluating input',async()=>{const r=await fetch(base+'/api/qa/run',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({ids:['process.exit(1)']})});assert.equal(r.status,422);});
+test('QA endpoint does not accept arbitrary methods',async()=>{const r=await fetch(base+'/api/qa/run',{method:'GET'});assert.equal(r.status,404);});

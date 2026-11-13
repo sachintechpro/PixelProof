@@ -14,6 +14,24 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 > **Responsive audit:** See [Mobile and tablet verification report](docs/RESPONSIVE_AUDIT.md).
 
 
+
+## Interactive QA Bench (v3.3) — run tests yourself
+
+**[Open the live Quality Bench](https://pixelproof-m9ym.onrender.com/#/quality)**.
+
+The Quality Bench retains the original direct **Run tests / Pass / Fail / Not run** structure, now with **55 user-executable checks** across four risk-based categories:
+
+- **Unit (14)** — pricing, SKU validation, category/search/sort, stock arithmetic and cancellation.
+- **SIT (15)** — connected checkout, declined payments, admin overview, stock reservation, label creation, dispatch and negative integration paths.
+- **UAT (14)** — customer-to-fulfillment business journeys (10 server-side workflows and 4 real browser DOM/viewport checks).
+- **Production (12)** — actual read-only/rejection-path HTTP calls against the active app (health, catalog, search, styles, SVG, authorization denial, deliberate 503, 404).
+
+**Run All**, **Run category**, **Run one**, **View proof**, and **Reset results** are available directly in the browser. Results always start **Not run**, and pass/fail counters only reflect the user's current execution. Proof includes test input, expected assertion, actual backend result or real HTTP status/body, and elapsed time. Reset clears this browser's test results, not the shared fictional store.
+
+Unit/SIT/most UAT checks execute the actual Node commerce functions against **fresh in-memory synthetic fixtures**. They do not send actual checkout HTTP requests or write shared store data. Production checks send genuine HTTP requests, but only safe GET operations. The result cards identify these two evidence types explicitly; the bench does not claim actual payments, postage, shipping, accessibility certification, physical iPhone validation or live database persistence.
+
+The build regression suite (`npm run check`) remains separate and generates `public/qa-ci-results.json` from actual TAP test output. These historical build results are never substituted for a visitor's on-demand test run.
+
 ## Admin demo login (v3.1)
 
 From the top navigation, choose **Admin login** or go directly to `/#/admin`.

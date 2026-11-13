@@ -6,7 +6,7 @@ const {spawnSync}=require('node:child_process');
 const fs=require('node:fs');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
-const checks=['server.js','commerce.js','admin-auth.js','public/app.js','public/admin.js','public/react-lab.js','public/qa-center.js'];
+const checks=['server.js','qa-live-runner.js','commerce.js','admin-auth.js','public/app.js','public/admin.js','public/react-lab.js','public/qa-center.js'];
 for(const file of checks){const out=spawnSync(process.execPath,['--check',file],{cwd:root,encoding:'utf8'});if(out.status!==0){process.stderr.write(out.stdout+out.stderr);process.exit(out.status||1);}}
 const files=fs.readdirSync(path.join(root,'tests')).filter(f=>f.endsWith('.test.js')).sort().map(f=>'tests/'+f);
 const run=spawnSync(process.execPath,['--test','--test-reporter=tap',...files],{cwd:root,encoding:'utf8',maxBuffer:20*1024*1024,env:{...process.env,FORCE_COLOR:'0'}});

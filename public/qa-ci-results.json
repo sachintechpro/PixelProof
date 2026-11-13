@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-13T08:40:06.910Z",
+  "generatedAt": "2026-11-13T08:53:18.612Z",
   "source": "Node.js built-in test runner (TAP)",
   "commit": null,
   "summary": {
-    "tests": 71,
-    "pass": 71,
+    "tests": 78,
+    "pass": 78,
     "fail": 0,
     "skip": null,
     "todo": 0,
     "cancelled": 0,
-    "durationMs": 379.822799
+    "durationMs": 433.09395
   },
   "tests": [
     {
       "id": "AT-001",
       "title": "new workspace starts with sample products and order queue",
       "status": "passed",
-      "durationMs": 26.618889,
+      "durationMs": 26.110914,
       "level": "API & integration",
       "priority": "P1"
     },
@@ -25,7 +25,7 @@
       "id": "AT-002",
       "title": "creating a product updates storefront search and overview",
       "status": "passed",
-      "durationMs": 17.237926,
+      "durationMs": 12.935341,
       "level": "API & integration",
       "priority": "P1"
     },
@@ -33,7 +33,7 @@
       "id": "AT-003",
       "title": "duplicate SKU is rejected and bad image payload is rejected",
       "status": "passed",
-      "durationMs": 7.624115,
+      "durationMs": 7.281724,
       "level": "Unit",
       "priority": "P2"
     },
@@ -41,7 +41,7 @@
       "id": "AT-004",
       "title": "editing product pricing, inventory and visibility propagates to storefront",
       "status": "passed",
-      "durationMs": 17.888563,
+      "durationMs": 14.644439,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -49,7 +49,7 @@
       "id": "AT-005",
       "title": "checkout creates a real sample order and reserves stock",
       "status": "passed",
-      "durationMs": 13.507948,
+      "durationMs": 14.196812,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -57,7 +57,7 @@
       "id": "AT-006",
       "title": "inventory validation prevents overselling",
       "status": "passed",
-      "durationMs": 5.815831,
+      "durationMs": 2.12888,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -65,7 +65,7 @@
       "id": "AT-007",
       "title": "fulfillment transitions are validated and cancelling returns stock",
       "status": "passed",
-      "durationMs": 33.464636,
+      "durationMs": 16.058925,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -73,7 +73,7 @@
       "id": "AT-008",
       "title": "a product with open orders cannot be deleted until fulfillment is resolved",
       "status": "passed",
-      "durationMs": 2.565811,
+      "durationMs": 1.448958,
       "level": "API & integration",
       "priority": "P1"
     },
@@ -81,7 +81,7 @@
       "id": "AT-009",
       "title": "deleted product leaves historic orders intact",
       "status": "passed",
-      "durationMs": 9.710667,
+      "durationMs": 3.536214,
       "level": "API & integration",
       "priority": "P1"
     },
@@ -89,7 +89,7 @@
       "id": "AT-010",
       "title": "each visitor gets an isolated workspace",
       "status": "passed",
-      "durationMs": 6.633378,
+      "durationMs": 20.37296,
       "level": "API & integration",
       "priority": "P2"
     },
@@ -97,7 +97,7 @@
       "id": "AT-011",
       "title": "reset restores original sample catalog and statuses",
       "status": "passed",
-      "durationMs": 10.966292,
+      "durationMs": 11.137689,
       "level": "Security",
       "priority": "P2"
     },
@@ -105,7 +105,7 @@
       "id": "AT-012",
       "title": "admin login checks credentials and limits access",
       "status": "passed",
-      "durationMs": 9.322315,
+      "durationMs": 11.154385,
       "level": "Security",
       "priority": "P2"
     },
@@ -113,7 +113,7 @@
       "id": "AT-013",
       "title": "admin routes require authentication for mutations too",
       "status": "passed",
-      "durationMs": 2.742598,
+      "durationMs": 2.817574,
       "level": "UI & responsive",
       "priority": "P0"
     },
@@ -121,7 +121,7 @@
       "id": "AT-014",
       "title": "demo admin login displays public credentials and a sign-in form",
       "status": "passed",
-      "durationMs": 3.1311,
+      "durationMs": 5.273956,
       "level": "UI & responsive",
       "priority": "P2"
     },
@@ -129,7 +129,7 @@
       "id": "AT-015",
       "title": "website loads admin before router and exposes the commerce route",
       "status": "passed",
-      "durationMs": 0.191037,
+      "durationMs": 0.247802,
       "level": "UI & responsive",
       "priority": "P2"
     },
@@ -137,7 +137,7 @@
       "id": "AT-016",
       "title": "admin styles include mobile breakpoints, table overflow and focus states",
       "status": "passed",
-      "durationMs": 0.191457,
+      "durationMs": 0.314934,
       "level": "UI & responsive",
       "priority": "P1"
     },
@@ -145,7 +145,7 @@
       "id": "AT-017",
       "title": "visitor catalog is shared across independent browser requests",
       "status": "passed",
-      "durationMs": 37.464901,
+      "durationMs": 36.08281,
       "level": "API & integration",
       "priority": "P2"
     },
@@ -153,7 +153,7 @@
       "id": "AT-018",
       "title": "fictional payment rejection never creates an order or reserves stock",
       "status": "passed",
-      "durationMs": 15.233137,
+      "durationMs": 20.036153,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -161,7 +161,7 @@
       "id": "AT-019",
       "title": "storefront checkout creates demo paid order, reserves stock and sends only token",
       "status": "passed",
-      "durationMs": 8.957241,
+      "durationMs": 18.559094,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -169,7 +169,7 @@
       "id": "AT-020",
       "title": "admin must log in before orders are visible, but then sees a different browser checkout",
       "status": "passed",
-      "durationMs": 7.264075,
+      "durationMs": 9.064162,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -177,7 +177,7 @@
       "id": "AT-021",
       "title": "cannot dispatch before a label has been created",
       "status": "passed",
-      "durationMs": 10.473263,
+      "durationMs": 13.756065,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -185,7 +185,7 @@
       "id": "AT-022",
       "title": "generate printable sample label with fake carrier and buyer details",
       "status": "passed",
-      "durationMs": 11.458681,
+      "durationMs": 10.283866,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -193,7 +193,7 @@
       "id": "AT-023",
       "title": "incorrect shipping label reference blocks dispatch; matching reference succeeds",
       "status": "passed",
-      "durationMs": 11.045722,
+      "durationMs": 8.774257,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -201,7 +201,7 @@
       "id": "AT-024",
       "title": "dispatched order can be marked delivered but cannot be cancelled or relabeled",
       "status": "passed",
-      "durationMs": 10.713192,
+      "durationMs": 27.263966,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -209,7 +209,7 @@
       "id": "AT-025",
       "title": "a cancelled ready order releases inventory, while a shortage fails atomically",
       "status": "passed",
-      "durationMs": 17.897977,
+      "durationMs": 21.04245,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -217,7 +217,7 @@
       "id": "AT-026",
       "title": "held seeded order blocks labels until stock is replenished and reserved",
       "status": "passed",
-      "durationMs": 17.857717,
+      "durationMs": 19.680889,
       "level": "API & integration",
       "priority": "P0"
     },
@@ -225,7 +225,7 @@
       "id": "AT-027",
       "title": "custom product quick-view overrides Bootstrap hidden modal",
       "status": "passed",
-      "durationMs": 0.813381,
+      "durationMs": 1.013102,
       "level": "UI & responsive",
       "priority": "P1"
     },
@@ -233,7 +233,7 @@
       "id": "AT-028",
       "title": "admin product Edit controls render on mobile cards",
       "status": "passed",
-      "durationMs": 0.256865,
+      "durationMs": 0.335445,
       "level": "UI & responsive",
       "priority": "P1"
     },
@@ -241,7 +241,7 @@
       "id": "AT-029",
       "title": "all admin tabs remain visible without horizontal scrolling at mobile sizes",
       "status": "passed",
-      "durationMs": 0.203005,
+      "durationMs": 0.238348,
       "level": "UI & responsive",
       "priority": "P1"
     },
@@ -249,55 +249,55 @@
       "id": "AT-030",
       "title": "mobile forms avoid iOS zoom and handle device safe area",
       "status": "passed",
-      "durationMs": 0.23295,
+      "durationMs": 1.694036,
       "level": "UI & responsive",
       "priority": "P1"
     },
     {
       "id": "AT-031",
-      "title": "QA matrix has unique scenario IDs and expected results",
+      "title": "QA manual coverage retains traceable expected results and unique IDs",
       "status": "passed",
-      "durationMs": 0.81302,
+      "durationMs": 1.184521,
       "level": "API & integration",
       "priority": "P2"
     },
     {
       "id": "AT-032",
-      "title": "QA matrix includes critical customer-to-dispatch risk scenarios",
+      "title": "QA manual matrix includes critical unfinished real-device and concurrency evidence",
       "status": "passed",
-      "durationMs": 0.270066,
-      "level": "UI & responsive",
-      "priority": "P0"
+      "durationMs": 0.839101,
+      "level": "API & integration",
+      "priority": "P2"
     },
     {
       "id": "AT-033",
-      "title": "QA center shows automation evidence, not synthetic passes",
+      "title": "QA bench offers genuine run-all, category, individual and session reset controls",
       "status": "passed",
-      "durationMs": 1.17909,
-      "level": "API & integration",
+      "durationMs": 7.622986,
+      "level": "UI & responsive",
       "priority": "P2"
     },
     {
       "id": "AT-034",
-      "title": "QA live smoke only runs invalid/declined checkout payloads",
+      "title": "QA bench does not mark cases passed before execution",
       "status": "passed",
-      "durationMs": 0.232519,
-      "level": "API & integration",
-      "priority": "P0"
-    },
-    {
-      "id": "AT-035",
-      "title": "QA center is loaded before route renderer",
-      "status": "passed",
-      "durationMs": 0.40616,
+      "durationMs": 0.693372,
       "level": "API & integration",
       "priority": "P2"
     },
     {
-      "id": "AT-036",
-      "title": "QA responsive CSS uses mobile layouts and clear focus",
+      "id": "AT-035",
+      "title": "Production checks are actual safe fetches and have demonstrable HTTP expectations",
       "status": "passed",
-      "durationMs": 0.4199,
+      "durationMs": 0.708665,
+      "level": "API & integration",
+      "priority": "P1"
+    },
+    {
+      "id": "AT-036",
+      "title": "QA page initialized before app routes and mobile styles exist",
+      "status": "passed",
+      "durationMs": 2.141559,
       "level": "UI & responsive",
       "priority": "P1"
     },
@@ -305,7 +305,7 @@
       "id": "AT-037",
       "title": "unit: product rejects negative stock and fractional inventory",
       "status": "passed",
-      "durationMs": 2.094875,
+      "durationMs": 1.950311,
       "level": "Unit",
       "priority": "P0"
     },
@@ -313,7 +313,7 @@
       "id": "AT-038",
       "title": "unit: product rejects invalid price precision and non-finite prices",
       "status": "passed",
-      "durationMs": 0.429685,
+      "durationMs": 0.425579,
       "level": "Unit",
       "priority": "P1"
     },
@@ -321,7 +321,7 @@
       "id": "AT-039",
       "title": "unit: product rejects invalid category and unsafe SKU",
       "status": "passed",
-      "durationMs": 0.277056,
+      "durationMs": 0.298128,
       "level": "Unit",
       "priority": "P1"
     },
@@ -329,7 +329,7 @@
       "id": "AT-040",
       "title": "unit: product allows zero stock but preserves hidden status",
       "status": "passed",
-      "durationMs": 0.198748,
+      "durationMs": 0.425589,
       "level": "Unit",
       "priority": "P0"
     },
@@ -337,7 +337,7 @@
       "id": "AT-041",
       "title": "unit: catalog filter excludes unpublished and honors category",
       "status": "passed",
-      "durationMs": 0.304487,
+      "durationMs": 0.283666,
       "level": "Unit",
       "priority": "P2"
     },
@@ -345,7 +345,7 @@
       "id": "AT-042",
       "title": "unit: catalog sorting by price works ascending and descending",
       "status": "passed",
-      "durationMs": 0.660111,
+      "durationMs": 0.882476,
       "level": "Unit",
       "priority": "P2"
     },
@@ -353,7 +353,7 @@
       "id": "AT-043",
       "title": "unit: checkout applies free shipping at 150 dollar threshold",
       "status": "passed",
-      "durationMs": 0.927202,
+      "durationMs": 0.993473,
       "level": "Unit",
       "priority": "P0"
     },
@@ -361,7 +361,7 @@
       "id": "AT-044",
       "title": "unit: checkout adds fixed shipping below free threshold",
       "status": "passed",
-      "durationMs": 0.41982,
+      "durationMs": 0.393131,
       "level": "Unit",
       "priority": "P0"
     },
@@ -369,7 +369,7 @@
       "id": "AT-045",
       "title": "unit: duplicate order lines are rejected before inventory mutation",
       "status": "passed",
-      "durationMs": 0.355304,
+      "durationMs": 0.390888,
       "level": "Unit",
       "priority": "P0"
     },
@@ -377,7 +377,7 @@
       "id": "AT-046",
       "title": "unit: cancelled checkout returns stock exactly once",
       "status": "passed",
-      "durationMs": 0.498439,
+      "durationMs": 0.468043,
       "level": "Unit",
       "priority": "P0"
     },
@@ -385,7 +385,7 @@
       "id": "AT-047",
       "title": "unit: failed label generation leaves order status unchanged",
       "status": "passed",
-      "durationMs": 0.297878,
+      "durationMs": 0.796888,
       "level": "Unit",
       "priority": "P0"
     },
@@ -393,7 +393,7 @@
       "id": "AT-048",
       "title": "unit: printable label refuses non-labelled and cancelled orders",
       "status": "passed",
-      "durationMs": 0.342014,
+      "durationMs": 0.382745,
       "level": "Unit",
       "priority": "P0"
     },
@@ -401,7 +401,7 @@
       "id": "AT-049",
       "title": "unit: label print escapes fictional address markup",
       "status": "passed",
-      "durationMs": 1.219471,
+      "durationMs": 0.335815,
       "level": "Unit",
       "priority": "P0"
     },
@@ -409,7 +409,7 @@
       "id": "AT-050",
       "title": "unit: cannot recheck a ready order or label an on-hold order",
       "status": "passed",
-      "durationMs": 0.238058,
+      "durationMs": 0.197627,
       "level": "Unit",
       "priority": "P0"
     },
@@ -417,7 +417,7 @@
       "id": "AT-051",
       "title": "unit: status machine blocks dispatch after cancellation",
       "status": "passed",
-      "durationMs": 0.42665,
+      "durationMs": 0.350256,
       "level": "Unit",
       "priority": "P0"
     },
@@ -425,7 +425,7 @@
       "id": "AT-052",
       "title": "API: admin session endpoint returns unauthenticated for anonymous browser",
       "status": "passed",
-      "durationMs": 47.947176,
+      "durationMs": 33.092707,
       "level": "Security",
       "priority": "P0"
     },
@@ -433,7 +433,7 @@
       "id": "AT-053",
       "title": "API: GET admin product and order endpoints reject anonymous requests",
       "status": "passed",
-      "durationMs": 6.297965,
+      "durationMs": 6.109493,
       "level": "API & integration",
       "priority": "P1"
     },
@@ -441,7 +441,7 @@
       "id": "AT-054",
       "title": "API: post without JSON content type is rejected 415",
       "status": "passed",
-      "durationMs": 6.536852,
+      "durationMs": 6.300299,
       "level": "API & integration",
       "priority": "P2"
     },
@@ -449,7 +449,7 @@
       "id": "AT-055",
       "title": "API: malformed JSON body is rejected 400",
       "status": "passed",
-      "durationMs": 4.6159,
+      "durationMs": 1.964673,
       "level": "UI & responsive",
       "priority": "P2"
     },
@@ -457,7 +457,7 @@
       "id": "AT-056",
       "title": "API: request body above limit is rejected 413",
       "status": "passed",
-      "durationMs": 10.855716,
+      "durationMs": 18.612083,
       "level": "API & integration",
       "priority": "P2"
     },
@@ -465,7 +465,7 @@
       "id": "AT-057",
       "title": "API: non-allowed origin is rejected for mutating request",
       "status": "passed",
-      "durationMs": 6.282291,
+      "durationMs": 3.91197,
       "level": "Security",
       "priority": "P2"
     },
@@ -473,7 +473,7 @@
       "id": "AT-058",
       "title": "API: unsupported HTTP method returns 405",
       "status": "passed",
-      "durationMs": 1.428505,
+      "durationMs": 4.003006,
       "level": "API & integration",
       "priority": "P2"
     },
@@ -481,7 +481,7 @@
       "id": "AT-059",
       "title": "API: unknown endpoint returns 404 and safe JSON response",
       "status": "passed",
-      "durationMs": 3.339684,
+      "durationMs": 1.523199,
       "level": "API & integration",
       "priority": "P2"
     },
@@ -489,7 +489,7 @@
       "id": "AT-060",
       "title": "API: health response is uncached and includes runtime version",
       "status": "passed",
-      "durationMs": 1.146701,
+      "durationMs": 1.31748,
       "level": "API & integration",
       "priority": "P2"
     },
@@ -497,87 +497,143 @@
       "id": "AT-061",
       "title": "API: nonexistent product image returns safe 404",
       "status": "passed",
-      "durationMs": 1.480192,
+      "durationMs": 5.150461,
       "level": "API & integration",
       "priority": "P1"
     },
     {
       "id": "AT-062",
-      "title": "health returns service status",
+      "title": "runnable QA catalog has unique Unit/SIT/UAT cases",
       "status": "passed",
-      "durationMs": 40.656522,
+      "durationMs": 1.331451,
       "level": "API & integration",
       "priority": "P2"
     },
     {
       "id": "AT-063",
-      "title": "products search and sort",
+      "title": "full isolated QA runner gives evidence for every passing case",
       "status": "passed",
-      "durationMs": 3.912603,
+      "durationMs": 8.070109,
       "level": "API & integration",
-      "priority": "P1"
+      "priority": "P2"
     },
     {
       "id": "AT-064",
-      "title": "search suggestions only match query",
+      "title": "runnable tests are repeatable and do not modify public catalog",
       "status": "passed",
-      "durationMs": 5.725034,
+      "durationMs": 0.52613,
       "level": "API & integration",
       "priority": "P2"
     },
     {
       "id": "AT-065",
-      "title": "error simulation returns 503",
+      "title": "GET /api/qa/catalog returns suite definitions, no executable source",
       "status": "passed",
-      "durationMs": 3.394065,
-      "level": "API & integration",
+      "durationMs": 29.095549,
+      "level": "UI & responsive",
       "priority": "P2"
     },
     {
       "id": "AT-066",
-      "title": "checkout rejects invalid input",
+      "title": "POST /api/qa/run returns actual business proof and summary",
       "status": "passed",
-      "durationMs": 7.369874,
+      "durationMs": 7.217838,
       "level": "API & integration",
-      "priority": "P0"
+      "priority": "P2"
     },
     {
       "id": "AT-067",
-      "title": "checkout calculates on trusted server prices",
+      "title": "QA endpoint rejects unsupported test ID instead of evaluating input",
       "status": "passed",
-      "durationMs": 4.081767,
+      "durationMs": 3.199378,
       "level": "API & integration",
-      "priority": "P0"
+      "priority": "P2"
     },
     {
       "id": "AT-068",
-      "title": "checkout rejects null payload",
+      "title": "QA endpoint does not accept arbitrary methods",
       "status": "passed",
-      "durationMs": 2.261525,
+      "durationMs": 5.93516,
       "level": "API & integration",
-      "priority": "P0"
+      "priority": "P2"
     },
     {
       "id": "AT-069",
-      "title": "asset HEAD provides content size",
+      "title": "health returns service status",
       "status": "passed",
-      "durationMs": 3.70408,
+      "durationMs": 35.398351,
       "level": "API & integration",
       "priority": "P2"
     },
     {
       "id": "AT-070",
+      "title": "products search and sort",
+      "status": "passed",
+      "durationMs": 6.989795,
+      "level": "API & integration",
+      "priority": "P1"
+    },
+    {
+      "id": "AT-071",
+      "title": "search suggestions only match query",
+      "status": "passed",
+      "durationMs": 5.998666,
+      "level": "API & integration",
+      "priority": "P2"
+    },
+    {
+      "id": "AT-072",
+      "title": "error simulation returns 503",
+      "status": "passed",
+      "durationMs": 5.490942,
+      "level": "API & integration",
+      "priority": "P2"
+    },
+    {
+      "id": "AT-073",
+      "title": "checkout rejects invalid input",
+      "status": "passed",
+      "durationMs": 8.586355,
+      "level": "API & integration",
+      "priority": "P0"
+    },
+    {
+      "id": "AT-074",
+      "title": "checkout calculates on trusted server prices",
+      "status": "passed",
+      "durationMs": 7.704179,
+      "level": "API & integration",
+      "priority": "P0"
+    },
+    {
+      "id": "AT-075",
+      "title": "checkout rejects null payload",
+      "status": "passed",
+      "durationMs": 7.472081,
+      "level": "API & integration",
+      "priority": "P0"
+    },
+    {
+      "id": "AT-076",
+      "title": "asset HEAD provides content size",
+      "status": "passed",
+      "durationMs": 6.956686,
+      "level": "API & integration",
+      "priority": "P2"
+    },
+    {
+      "id": "AT-077",
       "title": "path traversal and unknown path cannot expose files",
       "status": "passed",
-      "durationMs": 2.813413,
+      "durationMs": 5.313496,
       "level": "Security",
       "priority": "P2"
     },
     {
-      "id": "AT-071",
+      "id": "AT-078",
       "title": "homepage served",
       "status": "passed",
-      "durationMs": 3.042006,
+      "durationMs": 7.328003,
       "level": "UI & responsive",
       "priority": "P2"
     }

@@ -1,8 +1,8 @@
 {
   "name": "pixelproof",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "private": true,
-  "description": "Frontend engineering showcase with connected fictional eCommerce checkout, demo payments, shared admin fulfillment and printable shipping labels",
+  "description": "Interactive frontend engineering and eCommerce with a runnable Unit/SIT/UAT/Production QA bench",
   "scripts": {
     "start": "node server.js",
     "test": "node --test tests/*.test.js",
