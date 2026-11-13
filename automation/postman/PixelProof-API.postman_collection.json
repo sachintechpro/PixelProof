@@ -1,0 +1,137 @@
+{
+  "info": {
+    "name": "PixelProof QA — API Regression (safe)",
+    "description": "Functional, integration and negative API testing against an isolated PixelProof demo environment. Includes genuine Postman assertions; no real payments, shipping or mutations.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "8ae3cc7d-01e1-46ce-b43a-ecb86b2bc58c"
+  },
+  "item": [
+    {
+      "name": "Health 200",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/health",
+        "description": "Real HTTP health status against isolated PixelProof."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',function(){pm.response.to.have.status(200);});",
+              "pm.test('Service healthy',function(){pm.expect(pm.response.json().ok).to.eql(true);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catalog schema",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/products",
+        "description": "Public fictional catalog response."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',function(){pm.response.to.have.status(200);});",
+              "pm.test('Products array has records',function(){const v=pm.response.json();pm.expect(v.products).to.be.an('array').that.is.not.empty;pm.expect(v.products[0]).to.have.property('id');});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search filters",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/products?q=arc",
+        "description": "Verify search results obey query."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',function(){pm.response.to.have.status(200);});",
+              "pm.test('Each returned item matches arc',function(){const p=pm.response.json().products;pm.expect(p).to.be.an('array').that.is.not.empty;p.forEach(x=>pm.expect((x.name+' '+x.sku).toLowerCase()).to.include('arc'));});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin rejects unauthenticated",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/admin/overview",
+        "description": "Negative authorization expectation."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected 401',function(){pm.response.to.have.status(401);});",
+              "pm.test('Error JSON exists',function(){pm.expect(pm.response.json().error).to.be.a('string');});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Simulated outage 503",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/suggest?q=lamp&simulate=error",
+        "description": "Intentionally simulated failure is an expected result."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected 503',function(){pm.response.to.have.status(503);});",
+              "pm.test('Error is explicit',function(){pm.expect(pm.response.json().error.toLowerCase()).to.include('simulated');});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown endpoint 404",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/not-a-real-resource",
+        "description": "Safe rejection path."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected 404',function(){pm.response.to.have.status(404);});",
+              "pm.test('Error JSON exists',function(){pm.expect(pm.response.json().error).to.be.a('string');});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3000",
+      "type": "string"
+    }
+  ]
+}
