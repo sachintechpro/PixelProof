@@ -1,0 +1,42 @@
+name: PixelProof Live Render Asset Verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - "public/qa-lifecycle.js"
+      - "public/qa-lifecycle.css"
+      - "public/index.html"
+      - ".github/workflows/live-deployment-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  verify-live-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm live deployment serves exact source assets
+        shell: bash
+        run: |
+          SITE="https://pixelproof-m9ym.onrender.com"
+          found=0
+          for i in $(seq 1 28); do
+            echo "Checking live deployment attempt $i..."
+            if curl -LfSs --max-time 30 -H "Cache-Control: no-cache" "$SITE/qa-lifecycle.js?verify=$GITHUB_SHA" -o /tmp/qa-lifecycle-live.js &&
+               curl -LfSs --max-time 30 -H "Cache-Control: no-cache" "$SITE/qa-lifecycle.css?verify=$GITHUB_SHA" -o /tmp/qa-lifecycle-live.css &&
+               curl -LfSs --max-time 30 -H "Cache-Control: no-cache" "$SITE/" -o /tmp/pixelproof-live-index.html &&
+               cmp -s public/qa-lifecycle.js /tmp/qa-lifecycle-live.js &&
+               cmp -s public/qa-lifecycle.css /tmp/qa-lifecycle-live.css &&
+               grep -q 'qa-lifecycle.js?v=2' /tmp/pixelproof-live-index.html; then
+              found=1
+              break
+            fi
+            sleep 15
+          done
+          if [ "$found" -ne 1 ]; then
+            echo "Live site did not serve the exact source assets; deploy may be delayed or incorrect."
+            exit 1
+          fi
+          curl -LfSs --max-time 30 "$SITE/api/health" -o /tmp/pixelproof-health.json
+          grep -q '"ok":true' /tmp/pixelproof-health.json
+          echo "Confirmed: current QA JS, CSS, index and health are live on Render."
