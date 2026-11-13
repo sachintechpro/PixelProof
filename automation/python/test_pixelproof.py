@@ -133,7 +133,11 @@ def test_manual_execution_is_recorded_not_assumed(browser):
     form.find_element(By.NAME, "actual").send_keys(
         "Test-only manual verdict: inspected requirements and expected outcome."
     )
-    form.find_element(By.CSS_SELECTOR, 'button[type="submit"]').click()
+    save_button = form.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+    browser.execute_script('arguments[0].scrollIntoView({block:"center",behavior:"instant"});', save_button)
+    WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, '#ql-manual-form button[type="submit"]'))
+    ).click()
     WebDriverWait(browser, 10).until(
         lambda d: "Manual execution recorded" in d.find_element(By.ID, "ql-notice").text
     )
