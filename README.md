@@ -15,6 +15,14 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 
 
 
+## QA Lifecycle Workbench — requirements through release evidence
+
+**[Open the enhanced Quality Bench](https://pixelproof-m9ym.onrender.com/#/quality)** · **[Five-minute QA portfolio walkthrough](qa/PORTFOLIO_WALKTHROUGH.md)**
+
+The Quality Bench now includes six interactive lifecycle sections alongside the original 55-check runner: **Requirements**, **Test design**, **Manual execution**, **Automation**, **Defects & evidence**, and **QA reporting**. Eight risk-ranked requirements link to ten detailed manual test procedures and the existing 36 scenario-level cases. Visitors can author cases, record execution outcomes, attach screenshots/videos, log defects, and export leadership summaries. These manual records and attachments are stored **only in the visitor's browser**, not in a shared test management database.
+
+Real Python/pytest/Selenium browser and API tests are available in [automation/python](automation/python), with an [isolated GitHub Actions workflow](.github/workflows/python-selenium.yml) and actual JUnit/screenshot artifacts on execution. The original 55 checks, Run All, category runs, individual runs, proof views and Reset remain intact. Manual entries are labeled tester-entered; the page never substitutes them for automatically verified results. Destructive browser tests use isolated demo data, not the publicly shared storefront.
+
 ## Interactive QA Bench (v3.3) — run tests yourself
 
 **[Open the live Quality Bench](https://pixelproof-m9ym.onrender.com/#/quality)**.
