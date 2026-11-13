@@ -11,6 +11,17 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 >
 > **Source review:** See [Five-minute review guide](docs/REVIEW_GUIDE.md).
 
+
+## Admin demo login (v2.1)
+
+From the top navigation, choose **Admin login** or go directly to `/#/admin`.
+The login screen intentionally displays the public demonstration credentials:
+
+- **User ID:** `demo.admin`
+- **Password:** `PixelProof@2026`
+
+Use **Use these demo credentials** to populate the fields, then select **Sign in to admin console**. A successful login opens the connected products, inventory and order-processing dashboard. **Sign out** revokes the session. All `/api/admin/` data endpoints require a server-side, time-limited session. Demo credentials are public by design and **must not be used to protect production data**.
+
 ## Five interactive modules
 
 | Module | What to try | Implementation evidence |

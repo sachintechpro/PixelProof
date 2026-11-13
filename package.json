@@ -1,12 +1,12 @@
 {
   "name": "pixelproof",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "Interactive frontend engineering portfolio with a connected eCommerce storefront and administration console",
   "scripts": {
     "start": "node server.js",
     "test": "node --test tests/*.test.js",
-    "check": "node --check server.js && node --check commerce.js && node --check public/app.js && node --check public/admin.js && node --check public/react-lab.js && npm test"
+    "check": "node --check server.js && node --check commerce.js && node --check admin-auth.js && node --check public/app.js && node --check public/admin.js && node --check public/react-lab.js && npm test"
   },
   "engines": {
     "node": ">=20"

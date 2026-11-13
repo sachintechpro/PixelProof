@@ -4,6 +4,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const commerce = require('./commerce');
+const adminAuth = require('./admin-auth');
 const PORT = Number(process.env.PORT) || 3000;
 const PUBLIC = path.resolve(__dirname, 'public');
 const MIME = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.svg':'image/svg+xml', '.json':'application/json; charset=utf-8', '.png':'image/png', '.ico':'image/x-icon', '.txt':'text/plain; charset=utf-8' };
@@ -18,7 +19,14 @@ async function handler(req,res){
       if(!['GET','POST','PATCH','DELETE'].includes(req.method))return sendJSON(res,405,{error:'Method not allowed.'});
       if(req.method!=='GET')checkOrigin(req);
       const s=await commerce.workspace(req,res);const d=s.data;
-      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'2.0.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin']});
+      if(pathname==='/api/admin/session'&&req.method==='GET')return sendJSON(res,200,{authenticated:adminAuth.isAuthenticated(req,s),userId:adminAuth.isAuthenticated(req,s)?adminAuth.DEMO_USERNAME:null});
+      if(pathname==='/api/admin/login'&&req.method==='POST'){
+        const valid=adminAuth.login(req,res,s,await readBody(req));
+        return sendJSON(res,valid?200:401,valid?{authenticated:true,userId:adminAuth.DEMO_USERNAME}:{error:'Incorrect demo user ID or password.'});}
+      if(pathname==='/api/admin/logout'&&req.method==='POST'){
+        adminAuth.logout(req,res);return sendJSON(res,200,{authenticated:false});}
+      if(pathname.startsWith('/api/admin/')&&!adminAuth.isAuthenticated(req,s))return sendJSON(res,401,{error:'Admin sign-in required.'});
+      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'2.1.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin','demo-admin-login']});
       if(pathname==='/api/products'&&req.method==='GET'){
         const records=commerce.listProducts(s,url.searchParams);return sendJSON(res,200,{products:records,total:records.length,query:url.searchParams.get('q')||'',elapsedMs:Math.round(performance.now()-started)});}
       if(pathname==='/api/suggest'&&req.method==='GET'){

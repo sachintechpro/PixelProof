@@ -9,7 +9,7 @@ const post=(url,body)=>fetchAs(url,{method:'POST',headers:{'Content-Type':'appli
 const patch=(url,body)=>fetchAs(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 const product={name:'Proof ceramic tray',sku:'TRAY-2026',category:'Lifestyle',color:'Olive / Linen',price:39.95,inventory:3,description:'Hand-finished tray for everyday desk essentials.',image:'/assets/lamp.svg',active:true};
 let createdId,orderId;
-test.before(async()=>{server=http.createServer(handler);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;const r=await fetch(base+'/api/admin/overview');cookie=r.headers.get('set-cookie').split(';')[0];});
+test.before(async()=>{server=http.createServer(handler);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;const r=await fetch(base+'/api/health');const workspaceCookie=r.headers.get('set-cookie').split(';')[0];const login=await fetch(base+'/api/admin/login',{method:'POST',headers:{cookie:workspaceCookie,'Content-Type':'application/json'},body:JSON.stringify({username:'demo.admin',password:'PixelProof@2026'})});assert.equal(login.status,200);cookie=workspaceCookie+'; '+login.headers.get('set-cookie').split(';')[0];});
 test.after(async()=>{await new Promise(resolve=>server.close(resolve));});
 test('new workspace starts with sample products and order queue',async()=>{const [p,o]=await Promise.all([fetchAs('/api/admin/products'),fetchAs('/api/admin/orders')]);const a=await p.json(),b=await o.json();assert.equal(a.products.length,6);assert.ok(b.orders.length>=3);assert.ok(b.orders.every(x=>x.customer==='Demo shopper'));});
 test('creating a product updates storefront search and overview',async()=>{const r=await post('/api/admin/products',product);assert.equal(r.status,201);createdId=(await r.json()).product.id;const response=await (await fetchAs('/api/products?q=ceramic')).json();assert.equal(response.total,1);assert.equal(response.products[0].sku,'TRAY-2026');const metrics=await (await fetchAs('/api/admin/overview')).json();assert.equal(metrics.products,7);});
@@ -20,5 +20,26 @@ test('inventory validation prevents overselling',async()=>{const r=await post('/
 test('fulfillment transitions are validated and cancelling returns stock',async()=>{const id=encodeURIComponent(orderId);assert.equal((await patch('/api/admin/orders/'+id,{status:'Delivered'})).status,409);assert.equal((await patch('/api/admin/orders/'+id,{status:'Processing'})).status,200);assert.equal((await patch('/api/admin/orders/'+id,{status:'Cancelled'})).status,200);const p=(await(await fetchAs('/api/admin/products')).json()).products.find(x=>x.id===createdId);assert.equal(p.inventory,4);assert.equal((await patch('/api/admin/orders/'+id,{status:'Processing'})).status,409);});
 test('a product with open orders cannot be deleted until fulfillment is resolved',async()=>{const r=await fetchAs('/api/admin/products/arc-lamp',{method:'DELETE'});assert.equal(r.status,409);});
 test('deleted product leaves historic orders intact',async()=>{const r=await fetchAs('/api/admin/products/'+createdId,{method:'DELETE'});assert.equal(r.status,200);assert.equal((await(await fetchAs('/api/products?q=ceramic')).json()).total,0);const orders=(await(await fetchAs('/api/admin/orders')).json()).orders;assert.ok(orders.some(x=>x.id===orderId));});
-test('each visitor gets an isolated workspace',async()=>{const other=await fetch(base+'/api/admin/overview');const otherCookie=other.headers.get('set-cookie').split(';')[0];assert.notEqual(otherCookie,cookie);const r=await fetch(base+'/api/admin/products',{headers:{cookie:otherCookie}});assert.equal((await r.json()).products.length,6);});
+test('each visitor gets an isolated workspace',async()=>{const other=await fetch(base+'/api/health');const otherCookie=other.headers.get('set-cookie').split(';')[0];assert.notEqual(otherCookie,cookie);assert.equal((await fetch(base+'/api/admin/products',{headers:{cookie:otherCookie}})).status,401);const login=await fetch(base+'/api/admin/login',{method:'POST',headers:{cookie:otherCookie,'Content-Type':'application/json'},body:JSON.stringify({username:'demo.admin',password:'PixelProof@2026'})});assert.equal(login.status,200);const authCookie=login.headers.get('set-cookie').split(';')[0];const r=await fetch(base+'/api/admin/products',{headers:{cookie:otherCookie+'; '+authCookie}});assert.equal((await r.json()).products.length,6);});
 test('reset restores original sample catalog and statuses',async()=>{const r=await post('/api/admin/reset',{});assert.equal(r.status,200);const p=await(await fetchAs('/api/admin/products')).json();assert.equal(p.products.length,6);const o=await(await fetchAs('/api/admin/orders')).json();assert.equal(o.orders.length,3);});
+
+test('admin login checks credentials and limits access',async()=>{
+  const first=await fetch(base+'/api/health');const workspace=first.headers.get('set-cookie').split(';')[0];
+  assert.equal((await fetch(base+'/api/admin/overview',{headers:{cookie:workspace}})).status,401);
+  const bad=await fetch(base+'/api/admin/login',{method:'POST',headers:{cookie:workspace,'Content-Type':'application/json'},body:JSON.stringify({username:'demo.admin',password:'wrong'})});
+  assert.equal(bad.status,401);
+  const session=await fetch(base+'/api/admin/session',{headers:{cookie:workspace}});assert.equal((await session.json()).authenticated,false);
+  const login=await fetch(base+'/api/admin/login',{method:'POST',headers:{cookie:workspace,'Content-Type':'application/json'},body:JSON.stringify({username:'demo.admin',password:'PixelProof@2026'})});
+  assert.equal(login.status,200);const auth=login.headers.get('set-cookie').split(';')[0];const combined=workspace+'; '+auth;
+  const sessionAfter=await fetch(base+'/api/admin/session',{headers:{cookie:combined}});assert.equal((await sessionAfter.json()).authenticated,true);
+  assert.equal((await fetch(base+'/api/admin/overview',{headers:{cookie:combined}})).status,200);
+  const logout=await fetch(base+'/api/admin/logout',{method:'POST',headers:{cookie:combined,'Content-Type':'application/json'},body:'{}'});
+  assert.equal(logout.status,200);
+  assert.equal((await fetch(base+'/api/admin/overview',{headers:{cookie:combined}})).status,401);
+});
+
+test('admin routes require authentication for mutations too',async()=>{
+  const r=await fetch(base+'/api/admin/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(product)});
+  assert.equal(r.status,401);
+  assert.equal((await fetch(base+'/api/products')).status,200);
+});

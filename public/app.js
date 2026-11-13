@@ -46,7 +46,7 @@
     const node = document.createElement('div');node.className=`toast-message${error?' error':''}`;node.textContent=message;
     document.querySelector('#toast-region').appendChild(node);setTimeout(()=>node.remove(),3300);
   };
-  const navNames = [['home','Overview'],['store','Storefront'],['studio','Design studio'],['lab','Interaction lab'],['quality','Quality bench'],['admin','Commerce admin']];
+  const navNames = [['home','Overview'],['store','Storefront'],['studio','Design studio'],['lab','Interaction lab'],['quality','Quality bench'],['admin','Admin login']];
   function header() {return `<header class="site-header"><div class="container-app header-inner">
       <a class="brand" href="#/home" aria-label="PixelProof home"><span class="brand-icon">P<b>.</b></span><span><span class="brand-name">pixelproof.</span><span class="brand-sub">INTERFACE ENGINEERING LAB</span></span></a>
       <nav class="nav-wrap${state.mobileNav?' open':''}" aria-label="Main navigation">${navNames.map(([r,label])=>`<a class="nav-link${state.route===r?' active':''}" href="#/${r}" ${state.route===r?'aria-current="page"':''}>${label}</a>`).join('')}</nav>
