@@ -79,9 +79,12 @@ def test_admin_requires_authenticated_session():
 def test_storefront_cart_journey(browser):
     """Genuine UI journey: storefront to cart, no sample order created."""
     browser.get(BASE + "/#/store")
+    selector = '.product-card .small-add:not([disabled])'
     add = WebDriverWait(browser, 20).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-action="add"]'))
+        EC.presence_of_element_located((By.CSS_SELECTOR, selector))
     )
+    browser.execute_script('arguments[0].scrollIntoView({block:"center",behavior:"instant"});', add)
+    add = WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
     add.click()
     WebDriverWait(browser, 10).until(
         lambda d: int(d.find_element(By.CSS_SELECTOR, ".count-bubble").text or "0") >= 1
