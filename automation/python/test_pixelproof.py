@@ -137,7 +137,11 @@ def test_manual_execution_is_recorded_not_assumed(browser):
     WebDriverWait(browser, 10).until(
         lambda d: "Manual execution recorded" in d.find_element(By.ID, "ql-notice").text
     )
-    browser.find_element(By.CSS_SELECTOR, '[data-ql-tab="reports"]').click()
+    reports_tab = browser.find_element(By.CSS_SELECTOR, '[data-ql-tab="reports"]')
+    browser.execute_script('arguments[0].scrollIntoView({block:"center",behavior:"instant"});', reports_tab)
+    WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-ql-tab="reports"]'))
+    ).click()
     report = browser.find_element(By.ID, "ql-body").text
     assert "TC-03" in report
     assert "Passed" in report
