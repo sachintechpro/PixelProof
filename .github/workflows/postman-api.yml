@@ -1,0 +1,43 @@
+name: PixelProof Postman / Newman API QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - "automation/postman/**"
+      - ".github/workflows/postman-api.yml"
+      - "server.js"
+      - "commerce.js"
+      - "admin-auth.js"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  api-assertions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Start isolated PixelProof demo server
+        shell: bash
+        run: |
+          PIXELPROOF_ISOLATED=true PIXELPROOF_DATA_DIR="$RUNNER_TEMP/pixelproof-newman" PORT=3000 node server.js > /tmp/pixelproof-newman.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:3000/api/health > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/pixelproof-newman.log
+          exit 1
+      - name: Execute real Postman assertions using Newman
+        run: |
+          mkdir -p artifacts
+          npx --yes newman@6 run automation/postman/PixelProof-API.postman_collection.json --reporters cli,junit --reporter-junit-export artifacts/postman-junit.xml --timeout-request 15000
+      - name: Upload Newman results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixelproof-postman-newman-evidence
+          path: artifacts/postman-junit.xml
+          if-no-files-found: warn
