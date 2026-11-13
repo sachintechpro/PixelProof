@@ -150,7 +150,7 @@
       const related=state.catalog.filter(item=>item.id!==p.id).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,4);
       const shipping=p.price>=150?0:12;
       target.innerHTML=`<div class="overlay" data-action="backdrop"><div class="modal amazon-product-modal" role="dialog" aria-modal="true" aria-label="${safe(p.name)} product details">
-        <button class="modal-close" data-action="close" aria-label="Close product page">${icon('close',18)}</button>
+        <button class="modal-close" data-action="close" aria-label="Close quick view">${icon('close',18)}</button>
         <div class="amazon-breadcrumb">MONO / GOODS <span>›</span> ${safe(p.category)} <span>›</span> ${safe(p.name)}</div>
         <div class="amazon-product-main">
           <section class="amazon-gallery" aria-label="Product photo"><div class="amazon-image-frame"><img src="${safe(p.image)}" alt="${safe(p.name)} illustration"></div><div class="amazon-gallery-caption">Illustrative product image · Demo catalog</div></section>
