@@ -146,26 +146,41 @@
   function renderOverlay(){const target=document.querySelector('#overlay-root');if(!target)return;if(!state.overlay){target.innerHTML='';return;}
     if(state.overlay==='quick'){
       const p=getProduct(state.quickId);if(!p)return;
-      const related=state.catalog.filter(item=>item.id!==p.id).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,3);
-      const available=Math.max(0,Number(p.inventory)||0), shipping=p.price>=150?0:12;
-      target.innerHTML=`<div class="overlay" data-action="backdrop"><div class="modal product-detail-modal" role="dialog" aria-modal="true" aria-label="${safe(p.name)} product details">
-        <button class="modal-close" data-action="close" aria-label="Close product details">${icon('close',18)}</button>
-        <div class="product-detail-heading"><span class="eyebrow">MONO / GOODS · ${safe(p.category)}</span><span class="product-demo-label">SAMPLE STORE · FICTIONAL PRODUCTS</span></div>
-        <div class="product-detail-layout">
-          <div class="product-detail-gallery"><div class="product-detail-hero"><img src="${safe(p.image)}" alt="${safe(p.name)} illustration"></div><p>Product illustration · Sample catalog</p></div>
-          <section class="product-detail-buy" aria-label="Product and purchase information">
-            <h2>${safe(p.name)}</h2><div class="product-detail-review-summary"><span aria-hidden="true">★★★★★</span><span>Sample rating: 4.8 / 5 · 24 fictional reviews</span></div>
-            <div class="product-detail-price">${money(p.price)}${p.oldPrice?` <del>${money(p.oldPrice)}</del>`:''}</div>
-            <p class="product-detail-description">${safe(p.description)}</p>
-            <div class="product-detail-stock ${available?'in-stock':'out-stock'}">${available?'● In stock · '+available+' available (sample)':'● Currently out of stock'}</div>
-            <div class="product-detail-delivery"><strong>Delivery &amp; returns (demo)</strong><p>Standard shipping: ${shipping===0?'Free':money(shipping)} · Estimated 3–5 business days (illustrative).</p><p>30-day returns are a sample policy, not a live service.</p></div>
-            <div class="product-detail-actions"><button class="button full" data-action="add" data-id="${safe(p.id)}" ${available?'':'disabled aria-disabled="true"'}>${icon('bag',16)} ${available?'Add to bag':'Sold out'}</button><button class="button secondary full" data-action="quick-buy" data-id="${safe(p.id)}" ${available?'':'disabled aria-disabled="true"'}>Buy now · Demo checkout ${icon('arrow',15)}</button></div>
-            <div class="product-detail-specs"><h3>Product specifications</h3><dl><div><dt>Category</dt><dd>${safe(p.category)}</dd></div><div><dt>Finish / color</dt><dd>${safe(p.color)}</dd></div><div><dt>Product ID</dt><dd>${safe(p.id)}</dd></div><div><dt>Availability</dt><dd>${available} units (sample)</dd></div></dl><small>Only catalog-confirmed attributes are shown; technical specifications have not been provided.</small></div>
+      const available=Math.max(0,Number(p.inventory)||0);
+      const related=state.catalog.filter(item=>item.id!==p.id).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,4);
+      const shipping=p.price>=150?0:12;
+      target.innerHTML=`<div class="overlay" data-action="backdrop"><div class="modal amazon-product-modal" role="dialog" aria-modal="true" aria-label="${safe(p.name)} product details">
+        <button class="modal-close" data-action="close" aria-label="Close product page">${icon('close',18)}</button>
+        <div class="amazon-breadcrumb">MONO / GOODS <span>›</span> ${safe(p.category)} <span>›</span> ${safe(p.name)}</div>
+        <div class="amazon-product-main">
+          <section class="amazon-gallery" aria-label="Product photo"><div class="amazon-image-frame"><img src="${safe(p.image)}" alt="${safe(p.name)} illustration"></div><div class="amazon-gallery-caption">Illustrative product image · Demo catalog</div></section>
+          <section class="amazon-product-information">
+            <span class="amazon-store-name">Visit the MONO / GOODS demo store</span>
+            <h2>${safe(p.name)}</h2>
+            <div class="amazon-rating"><span class="amazon-stars" aria-label="Fictional rating four point eight out of five">★★★★★</span><span>4.8 out of 5</span><a href="#amazon-reviews" data-action="jump-reviews">24 sample ratings</a></div>
+            <div class="amazon-hr"></div>
+            ${p.oldPrice?`<div class="amazon-old-price">List price <del>${money(p.oldPrice)}</del></div>`:''}
+            <div class="amazon-main-price">${money(p.price)}</div><div class="amazon-tax-note">Sample price · No actual purchases</div>
+            <div class="amazon-hr"></div>
+            <p class="amazon-description">${safe(p.description)}</p>
+            <h3>About this item</h3>
+            <ul class="amazon-feature-list"><li>Designed as part of the MONO / GOODS example collection</li><li>Finish: ${safe(p.color)}</li><li>Category: ${safe(p.category)}</li><li>Catalog-backed stock and price displayed above</li></ul>
+            <h3>Product information</h3>
+            <table class="amazon-spec-table"><tbody><tr><th>Product name</th><td>${safe(p.name)}</td></tr><tr><th>Finish / color</th><td>${safe(p.color)}</td></tr><tr><th>Category</th><td>${safe(p.category)}</td></tr><tr><th>Product ID</th><td>${safe(p.id)}</td></tr><tr><th>Inventory</th><td>${available} units (demo)</td></tr></tbody></table>
+            <p class="amazon-spec-note">Dimensions, weight, compatibility and manufacturer claims are not available in the catalog.</p>
           </section>
+          <aside class="amazon-buy-box" aria-label="Purchase options">
+            <div class="amazon-buy-price">${money(p.price)}</div>
+            <p><strong>${shipping===0?'FREE demo delivery':money(shipping)+' sample shipping'}</strong><br>Illustrative delivery in 3–5 business days</p>
+            <div class="amazon-buy-stock ${available?'':'soldout'}">${available?'In stock':'Currently unavailable'}</div><small>${available} units available · sample inventory</small>
+            <div class="amazon-buy-actions"><button class="amazon-cart-button" data-action="add" data-id="${safe(p.id)}" ${available?'':'disabled'}>${icon('bag',16)} Add to bag</button><button class="amazon-buy-button" data-action="quick-buy" data-id="${safe(p.id)}" ${available?'':'disabled'}>Buy now · Demo checkout</button></div>
+            <div class="amazon-buy-meta"><div><span>Ships from</span><b>Sample store</b></div><div><span>Sold by</span><b>MONO / GOODS demo</b></div><div><span>Returns</span><b>30-day sample policy</b></div><div><span>Payment</span><b>Fictional test only</b></div></div>
+            <p class="amazon-buyer-note">No real payment, shipping, warranty or delivery service is offered.</p>
+          </aside>
         </div>
-        <div class="product-detail-lower"><section><h3>Product description</h3><p>${safe(p.description)}</p><p class="product-detail-note">This is an illustrative store. Product specifications, deliveries, payment and reviews are not real-world claims.</p></section><section><h3>Customer reviews</h3><div class="product-detail-review"><strong>★★★★★ &nbsp; Great everyday design</strong><p>“Clear styling and a simple setup.”</p><small>Fictional review · Example content for UI testing</small></div><div class="product-detail-review"><strong>★★★★☆ &nbsp; Nice finish</strong><p>“The finish works well in a modern space.”</p><small>Fictional review · Example content for UI testing</small></div></section></div>
-        ${related.length?`<section class="product-detail-related"><h3>You may also like</h3><div class="product-detail-related-grid">${related.map(item=>`<button type="button" class="product-detail-related-item" data-action="quick" data-id="${safe(item.id)}"><img src="${safe(item.image)}" alt=""><span><strong>${safe(item.name)}</strong><small>${money(item.price)}</small></span></button>`).join('')}</div></section>`:''}
-        <p class="product-detail-disclaimer">Demo checkout only · No real card charges, carrier bookings, or customer purchases.</p>
+        <section class="amazon-below"><div><h3>Product description</h3><p>${safe(p.description)}</p><p>Illustrative product detail experience using the current store catalog.</p></div><div id="amazon-reviews"><h3>Customer reviews <span>(fictional examples)</span></h3><div class="amazon-review"><strong><span>★★★★★</span> Thoughtful design</strong><p>“Simple styling and an attractive finish.”</p><small>Example review, not submitted by a customer</small></div><div class="amazon-review"><strong><span>★★★★☆</span> Good everyday item</strong><p>“Fits a minimal modern setup.”</p><small>Example review, not submitted by a customer</small></div></div></section>
+        ${related.length?`<section class="amazon-recommendations"><h3>Products related to this item</h3><div class="amazon-recommendation-grid">${related.map(item=>`<button class="amazon-recommendation" data-action="quick" data-id="${safe(item.id)}"><img src="${safe(item.image)}" alt=""><strong>${safe(item.name)}</strong><span>${money(item.price)}</span></button>`).join('')}</div></section>`:''}
+        <footer class="amazon-product-footer">PixelProof demonstration storefront · All customer reviews, fulfillment times, and policies on this page are examples.</footer>
       </div></div>`;
     }
     if(state.overlay==='cart'){const items=Object.entries(state.cart).map(([id,qty])=>({p:getProduct(id),qty:Number(qty)})).filter(x=>x.p&&x.qty>0);const total=items.reduce((s,{p,qty})=>s+p.price*qty,0);const shipping=total>=150?0:12;target.innerHTML=`<div class="overlay drawer-overlay" data-action="backdrop"><aside class="drawer" role="dialog" aria-modal="true" aria-label="Shopping bag"><div class="drawer-head"><h3>Your bag <span class="pill green">${cartCount()} ITEMS</span></h3><button class="modal-close" style="position:static;box-shadow:none;background:#f0f3ef" data-action="close" aria-label="Close shopping bag">${icon('close',18)}</button></div><div class="drawer-body">${items.length?items.map(({p,qty})=>`<div class="cart-item"><img src="${safe(p.image)}" alt="${safe(p.name)}"><div><strong>${safe(p.name)}</strong><small>${safe(p.color)}</small><div class="qty-control"><button data-action="qty" data-id="${safe(p.id)}" data-delta="-1" aria-label="Decrease quantity">−</button><b style="font-size:12px">${qty}</b><button data-action="qty" data-id="${safe(p.id)}" data-delta="1" aria-label="Increase quantity">+</button><strong style="margin-left:auto">${money(p.price*qty)}</strong></div></div></div>`).join(''):`<div class="drawer-empty">${icon('bag',35)}<h3>Your bag is empty</h3><p>Find something you love in the collection.</p><button class="button" data-action="close">Continue exploring ${icon('arrow')}</button></div>`}</div>${items.length?`<div class="drawer-bottom"><div class="checkout-row"><span>Subtotal</span><strong>${money(total)}</strong></div><div class="checkout-row"><span>Shipping ${total>=150?'(free over $150)':''}</span><strong>${money(shipping)}</strong></div><div class="checkout-row" style="border-top:1px solid #e9efe7;padding-top:13px;font-weight:800"><span>Total</span><strong>${money(total+shipping)}</strong></div><button class="button full" type="button" data-action="checkout">Continue to checkout ${icon('arrow',16)}</button><p class="small" style="margin:10px 0">Test checkout with fictional contact and payment details. No actual charges or shipments.</p></div>`:''}</aside></div>`;}}
@@ -183,6 +198,7 @@
     if(action==='fill-checkout'){const form=document.getElementById('customer-checkout-form');if(form){const values={customer:'Alex Example',email:'alex@example.com',address1:'123 Example Lane',city:'Sample City',region:'CA',postalCode:'90001',cardNumber:'4242 4242 4242 4242',expiry:'12/30',cvc:'123'};for(const [key,value] of Object.entries(values))form.elements.namedItem(key).value=value;toast('Fictional test details filled in');}return;}
 
     if(action==='quick'){openOverlay('quick',actionEl.dataset.id);return;}
+    if(action==='jump-reviews'){e.preventDefault();document.getElementById('amazon-reviews')?.scrollIntoView({behavior:'smooth',block:'start'});return;}
     if(action==='quick-buy'){add(actionEl.dataset.id);closeOverlay();try{await ensureCatalog();go('checkout');}catch{toast('Checkout unavailable. Your bag was saved.',true);}return;}
     if(action==='add'){add(actionEl.dataset.id);return;}
     if(action==='qty'){changeQty(actionEl.dataset.id,Number(actionEl.dataset.delta));return;}
