@@ -13,7 +13,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 
 BASE = os.environ.get("PIXELPROOF_BASE_URL", "http://127.0.0.1:3000").rstrip("/")
 
@@ -121,3 +121,24 @@ def test_mobile_qa_tabs_remain_in_page(browser):
         rect = tab.rect
         assert rect["x"] >= -2, (tab.text, rect)
         assert rect["x"] + rect["width"] <= width + 2, (tab.text, rect, width)
+
+
+def test_manual_execution_is_recorded_not_assumed(browser):
+    """Write a genuine browser-local QA record and inspect reporting evidence."""
+    browser.get(BASE + "/#/quality")
+    wait_for(browser, (By.ID, "qa-lifecycle"))
+    browser.find_element(By.CSS_SELECTOR, '[data-ql-tab="manual"]').click()
+    form = wait_for(browser, (By.ID, "ql-manual-form"))
+    Select(form.find_element(By.NAME, "status")).select_by_visible_text("Passed")
+    form.find_element(By.NAME, "actual").send_keys(
+        "Test-only manual verdict: inspected requirements and expected outcome."
+    )
+    form.find_element(By.CSS_SELECTOR, 'button[type="submit"]').click()
+    WebDriverWait(browser, 10).until(
+        lambda d: "Manual execution recorded" in d.find_element(By.ID, "ql-notice").text
+    )
+    browser.find_element(By.CSS_SELECTOR, '[data-ql-tab="reports"]').click()
+    report = browser.find_element(By.ID, "ql-body").text
+    assert "TC-03" in report
+    assert "Passed" in report
+    assert "tester-entered" in report.lower()
