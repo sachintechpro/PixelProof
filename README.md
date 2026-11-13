@@ -7,7 +7,7 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 
 ![PixelProof overview](screenshots/home-desktop.png)
 
-> **Live URL:** https://pixelproof-m9ym.onrender.com/ (deploy the v3.1 code first; existing deployed site may still use an older nested folder)
+> **Live application:** [Launch PixelProof v3.1 on Render](https://pixelproof-m9ym.onrender.com/)
 >
 > **Source review:** See [Five-minute review guide](docs/REVIEW_GUIDE.md).
 >
