@@ -26,7 +26,7 @@ async function handler(req,res){
       if(pathname==='/api/admin/logout'&&req.method==='POST'){
         adminAuth.logout(req,res);return sendJSON(res,200,{authenticated:false});}
       if(pathname.startsWith('/api/admin/')&&!adminAuth.isAuthenticated(req,s))return sendJSON(res,401,{error:'Admin sign-in required.'});
-      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'3.1.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin','demo-admin-login','test-payment-checkout','printable-demo-labels','dispatch-verification','shared-fictional-orders']});
+      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'3.2.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin','demo-admin-login','test-payment-checkout','printable-demo-labels','dispatch-verification','shared-fictional-orders','quality-command-center']});
       if(pathname==='/api/products'&&req.method==='GET'){
         const records=commerce.listProducts(s,url.searchParams);return sendJSON(res,200,{products:records,total:records.length,query:url.searchParams.get('q')||'',elapsedMs:Math.round(performance.now()-started)});}
       if(pathname==='/api/suggest'&&req.method==='GET'){

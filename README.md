@@ -7,7 +7,7 @@ PixelProof is a responsive, interactive engineering showcase for a frontend deve
 
 ![PixelProof overview](screenshots/home-desktop.png)
 
-> **Live application:** [Launch PixelProof v3.1 on Render](https://pixelproof-m9ym.onrender.com/)
+> **Live URL:** https://pixelproof-m9ym.onrender.com/ (deploy the v3.1 code first; existing deployed site may still use an older nested folder)
 >
 > **Source review:** See [Five-minute review guide](docs/REVIEW_GUIDE.md).
 >
@@ -46,6 +46,18 @@ See [the journey and limitations](docs/REAL_COMMERCE_JOURNEY.md) for API paths a
 | **Commerce admin** | Create and edit products, optimize product images, manage visibility/SKU/inventory, print fictional labels, verify references, dispatch individual orders, cancel with restocking, reset shared demo | `public/admin.js`, `commerce.js`, `server.js`, `tests/commerce.test.js` |
 
 ![Storefront](screenshots/store-desktop.png)
+
+## QA Command Center — risk-based evidence (v3.2)
+
+The **Quality bench** now includes an eight-level test strategy, real automated test results generated on each build, a searchable test case inventory, a 16-check read-only live browser smoke suite, confirmed regression defects, explicit validation gaps, and a conditional release decision. It does **not** count manual test plans as passing or claim production/iOS accessibility certification.
+
+- **[Open the live Quality Bench](https://pixelproof-m9ym.onrender.com/#/quality)**
+- **[Test strategy and release gates](qa/TEST_STRATEGY.md)**
+- **[Confirmed defects and validation risks](qa/DEFECTS.md)**
+- **[Manual / exploratory case matrix](qa/manual-cases.json)**
+- **[CI runs](https://github.com/sachintechpro/PixelProof/actions)**
+
+Run `npm run check` to execute actual Node tests and generate `public/qa-ci-results.json`. Render runs this command at deployment time, so the visible dashboard references deployment build evidence. Test outcomes and counts are not hardcoded.
 
 ## Technologies demonstrated
 

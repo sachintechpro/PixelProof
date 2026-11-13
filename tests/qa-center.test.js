@@ -1,0 +1,13 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
+const matrix=JSON.parse(read('qa/manual-cases.json'));
+test('QA matrix has unique scenario IDs and expected results',()=>{assert.ok(matrix.length>=30);assert.equal(new Set(matrix.map(x=>x.id)).size,matrix.length);assert.ok(matrix.every(x=>x.title&&x.expected&&x.area&&x.level&&x.priority));});
+test('QA matrix includes critical customer-to-dispatch risk scenarios',()=>{for(const x of ['checkout','inventory','label','dispatch','iPhone','VoiceOver','concurrency','recovery'])assert.ok(matrix.some(c=>(c.title+' '+c.expected+' '+c.area).toLowerCase().includes(x.toLowerCase())),x);});
+test('QA center shows automation evidence, not synthetic passes',()=>{const s=read('public/qa-center.js');assert.match(s,/qa-ci-results\.json/);assert.match(s,/not executed/);assert.match(s,/Pending evidence/);assert.match(s,/Render Free/);assert.ok(!/36\/36 passed/.test(s));});
+test('QA live smoke only runs invalid/declined checkout payloads',()=>{const s=read('public/qa-center.js');assert.match(s,/status===402/);assert.match(s,/status===422/);assert.ok(!s.includes("data-qc-reset"));});
+test('QA center is loaded before route renderer',()=>{const index=read('public/index.html');assert.ok(index.indexOf('qa-center.js')<index.indexOf('/app.js'));const app=read('public/app.js');assert.match(app,/window\.PixelProofQA\.render\(\)/);assert.match(app,/window\.PixelProofQA\.mount\(\)/);});
+test('QA responsive CSS uses mobile layouts and clear focus',()=>{const css=read('public/styles.css');assert.match(css,/@media\(max-width:530px\)/);assert.match(css,/\.qc-case-expanded/);assert.match(css,/\.qc-page button:focus-visible/);});
