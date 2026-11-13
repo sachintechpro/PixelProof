@@ -26,7 +26,7 @@ async function handler(req,res){
       if(pathname==='/api/admin/logout'&&req.method==='POST'){
         adminAuth.logout(req,res);return sendJSON(res,200,{authenticated:false});}
       if(pathname.startsWith('/api/admin/')&&!adminAuth.isAuthenticated(req,s))return sendJSON(res,401,{error:'Admin sign-in required.'});
-      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'2.1.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin','demo-admin-login']});
+      if(pathname==='/api/health'&&req.method==='GET')return sendJSON(res,200,{ok:true,service:'PixelProof API',version:'3.1.0',timestamp:new Date().toISOString(),runtime:'Node.js',features:['catalog-management','inventory','sample-order-workflow','session-isolated-admin','demo-admin-login','test-payment-checkout','printable-demo-labels','dispatch-verification','shared-fictional-orders']});
       if(pathname==='/api/products'&&req.method==='GET'){
         const records=commerce.listProducts(s,url.searchParams);return sendJSON(res,200,{products:records,total:records.length,query:url.searchParams.get('q')||'',elapsedMs:Math.round(performance.now()-started)});}
       if(pathname==='/api/suggest'&&req.method==='GET'){
@@ -43,11 +43,26 @@ async function handler(req,res){
       if(productMatch&&req.method==='PATCH'){
         const p=d.products.find(p=>p.id===productMatch[1]);if(!p)commerce.fail(404,'Product not found.');Object.assign(p,commerce.validateProduct(await readBody(req),d.products,p.id));await commerce.save(s);return sendJSON(res,200,{product:p});}
       if(productMatch&&req.method==='DELETE'){
-        const i=d.products.findIndex(p=>p.id===productMatch[1]);if(i===-1)commerce.fail(404,'Product not found.');if(d.orders.some(o=>['Pending','Processing'].includes(o.status)&&o.items.some(item=>item.id===productMatch[1])))commerce.fail(409,'Cannot delete a product with open orders. Hide it instead, or finish the orders first.');const [removed]=d.products.splice(i,1);await commerce.save(s);return sendJSON(res,200,{removed:removed.id});}
+        const i=d.products.findIndex(p=>p.id===productMatch[1]);if(i===-1)commerce.fail(404,'Product not found.');if(d.orders.some(o=>['Pending','Processing','Ready','Label created','On Hold'].includes(o.status)&&o.items.some(item=>item.id===productMatch[1])))commerce.fail(409,'Cannot delete a product with open orders. Hide it instead, or finish the orders first.');const [removed]=d.products.splice(i,1);await commerce.save(s);return sendJSON(res,200,{removed:removed.id});}
       if(pathname==='/api/admin/orders'&&req.method==='GET')return sendJSON(res,200,{orders:d.orders,statuses:commerce.statuses});
+      if(pathname==='/api/admin/activity'&&req.method==='GET')return sendJSON(res,200,{events:d.activity||[]});
       const orderMatch=pathname.match(/^\/api\/admin\/orders\/(PP-[A-Z0-9-]+)$/);
       if(orderMatch&&req.method==='PATCH'){
         const payload=await readBody(req);const order=commerce.updateStatus(s,orderMatch[1],payload?.status);await commerce.save(s);return sendJSON(res,200,{order});}
+      const workflowMatch=pathname.match(/^\/api\/admin\/orders\/(PP-[A-Z0-9-]+)\/(label|dispatch|recheck)$/);
+      if(workflowMatch){
+        const [,id,action]=workflowMatch;
+        if(action==='label'&&req.method==='GET'){
+          const html=commerce.printableLabel(commerce.findOrder(s,id));
+          res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'",'X-Content-Type-Options':'nosniff'});return res.end(html);}
+        if(req.method==='POST'){
+          let result;
+          if(action==='label')result=commerce.createShippingLabel(s,id);
+          else if(action==='dispatch')result={order:commerce.dispatchOrder(s,id,(await readBody(req)).labelRef)};
+          else result={order:commerce.recheckHeldOrder(s,id)};
+          await commerce.save(s);return sendJSON(res,200,result);
+        }
+      }
       if(pathname==='/api/admin/reset'&&req.method==='POST'){s.data=commerce.seedWorkspace();await commerce.save(s);return sendJSON(res,200,{ok:true});}
       return sendJSON(res,404,{error:'Unknown API endpoint.'});
     }

@@ -1,45 +1,34 @@
-# PixelProof Commerce Admin — Technical Walkthrough
+# PixelProof Commerce Admin (v3)
 
-A working, isolated demonstration of eCommerce back-office development. Visit **Commerce admin** in the top navigation or `/#/admin` directly.
+Open `/#/admin` from the top navigation. Public demo username: `demo.admin`; password: `PixelProof@2026`.
 
-## What reviewers can test
+This is the business-owner counterpart to the fictional storefront. Unlike the earlier isolated prototype, the server now maintains a **shared fictional catalog and order queue** across browsers. Products and inventory updates become visible to all storefront visitors; a checkout order appears in admin without needing to share a browser session. Do not enter real customer details.
 
-1. **Create product:** Set a unique SKU, name, category, price, stock, finish, description, visibility and image. Select a bundled SVG illustration or upload a PNG/JPEG/WebP (client-side canvas optimization to WebP, 512 px max). The server validates every field and caps payloads.
-2. **See it in the storefront:** Visit `/#/store`. The storefront reads the same workspace's catalog via `/api/products`; edits, prices, visibility and remaining stock appear in the customer UI.
-3. **Create a sample order:** Add a product to the cart and enter a test email at checkout. The **server** validates quantities and calculates trusted prices, applies shipping, creates a sample order record, and reserves inventory. No payment is collected, and the email is not saved in the order record.
-4. **Process the order:** Visit Admin → Order processing. Expand the new order, then move Pending → Processing → Shipped → Delivered. Invalid transitions return HTTP 409. Pending/Processing orders can be cancelled and stock is restored.
-5. **Explore errors:** Try duplicate SKUs (HTTP 409), invalid product inputs (HTTP 422), out-of-stock checkout (HTTP 422), and unknown API routes (HTTP 404). Server and UI display error messages.
-6. **Reset:** A confirmation-backed reset restores starter products and sample orders **for your browser's workspace**, without changing other visitors' demo workspaces.
+## Admin workflows
 
-## API map
+- Create and edit products, categories, prices, inventory, visibility and optimized images. Product updates are immediately visible to public storefront requests.
+- Browse and expand individual orders to see line items, totals, simulated payment status, demo customer and fictional delivery address.
+- New successful demo checkouts become **Ready** with inventory reserved. Generate a shipping label only for a Ready order. The printable HTML label prominently states **DEMONSTRATION ONLY — NOT VALID FOR SHIPMENT**.
+- Enter the exact `DEMO-LBL-...` label reference before **Mark dispatched**. Wrong refs return HTTP 422; out-of-order transitions return HTTP 409.
+- Mark the simulated dispatched order **Delivered**. Cancellation is available only before dispatch and returns reserved inventory.
+- Seeded **On Hold** order requires a stock increase and a **Recheck inventory** action before a label is allowed.
+- **Reset** restores shared fictional data and affects all visitors. The stored JSON file is ephemeral on Render Free and may reset on redeploy.
 
-| Method | Route | Behavior |
+## API
+
+| Method | Endpoint | Purpose |
 |---|---|---|
-| GET | `/api/products` | Public active catalog, search, category, sorting |
-| GET | `/api/suggest` | Live product suggestions |
-| POST | `/api/orders` | Sample checkout, stock reservation, server-side totals |
-| GET | `/api/admin/overview` | Order metrics and inventory summary |
-| GET/POST | `/api/admin/products` | View all products or create new product |
-| PATCH/DELETE | `/api/admin/products/:id` | Edit and delete product |
-| GET | `/api/admin/orders` | Inspect order queue, saved line-item snapshots |
-| PATCH | `/api/admin/orders/:id` | Transition fulfillment stage (and restock on cancellation) |
-| POST | `/api/admin/reset` | Restore starter sandbox data |
+| POST | `/api/orders` | Demo checkout and trusted order pricing, fictional payment token and stock reservation |
+| GET | `/api/admin/overview` | Summary metrics |
+| GET/POST | `/api/admin/products` | Product listing and creation |
+| PATCH/DELETE | `/api/admin/products/:id` | Product updates/deletion |
+| GET | `/api/admin/orders` | Shared fictional order queue |
+| PATCH | `/api/admin/orders/:id` | Controlled status transitions/cancel and stock return |
+| POST | `/api/admin/orders/:id/label` | Generate fictitious shipping label reference |
+| GET | `/api/admin/orders/:id/label` | Printable invalid label HTML, admin session required |
+| POST | `/api/admin/orders/:id/dispatch` | Verify matching label and mark dispatched |
+| POST | `/api/admin/orders/:id/recheck` | Recheck held order after stock replenishment |
+| GET | `/api/admin/activity` | Server-side demo activity log |
+| POST | `/api/admin/reset` | Reset shared demo data |
 
-## Storage and privacy constraints
-
-- The server issues a random 48-character HttpOnly SameSite=Lax workspace cookie. Its value identifies a separate demo dataset for this browser. Mutating requests require JSON and check Origin when supplied.
-- Workspace state is written atomically to `.local-data/<random-id>.json` (excluded from version control). `PIXELPROOF_DATA_DIR` can override the storage path. This survives process restarts when the filesystem remains intact.
-- **Render Free filesystems are ephemeral:** demo workspaces may reset after service restart, deploy or instance replacement. A real system would use a durable database with backup, migrations, observability, access controls and audit history.
-- **No real login or privileged user authentication is implemented.** This is intentional for a public, isolated portfolio lab, **not** a model for production admin security.
-- Email is validated at sample checkout, but no customer email is stored in the order record. No payment data, real customers, card charging, shipping carrier, or external commerce platform is involved.
-- Data has intentionally small limits (40 products per workspace, 100 recorded sample orders, 6 MB image input client-side and ~400 KB optimized output) to keep the public demo lightweight.
-
-## Source code
-
-- `public/admin.js` — admin console interactions, product editor, image conversion and order actions.
-- `public/styles.css` — admin console responsive layout and styling.
-- `commerce.js` — domain logic, validation, session isolation, seed catalog, inventory rules, JSON persistence.
-- `server.js` — web server, API handlers, method checks, response codes.
-- `tests/commerce.test.js` — end-to-end API-level tests for CRUD, duplicates, visibility, checkout, inventory, fulfillment and isolation.
-
-**Design principle:** A hiring reviewer should be able to execute a concrete action and verify the corresponding state change, rather than relying on unsupported statements about skills.
+No actual gateway transaction, postage charge, carrier handoff, supplier purchase, tax rate, or tracking API is connected. This is not production-ready checkout, payment, security, or storage.

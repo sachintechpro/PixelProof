@@ -3,18 +3,18 @@
 
 **Built to the pixel. Proven in the browser.**
 
-**[Launch PixelProof — Live Demo](https://pixelproof-m9ym.onrender.com/)**
-
 PixelProof is a responsive, interactive engineering showcase for a frontend developer role. It is not a collection of static screenshots or a slide deck: employers can use a working storefront, operate a connected commerce administration console, modify CSS on screen, interact with a real React component, exercise a jQuery API flow, and execute browser smoke checks.
 
 ![PixelProof overview](screenshots/home-desktop.png)
 
-> **Live application:** [Launch PixelProof on Render](https://pixelproof-m9ym.onrender.com/)
+> **Live URL:** https://pixelproof-m9ym.onrender.com/ (deploy the v3.1 code first; existing deployed site may still use an older nested folder)
 >
 > **Source review:** See [Five-minute review guide](docs/REVIEW_GUIDE.md).
+>
+> **Responsive audit:** See [Mobile and tablet verification report](docs/RESPONSIVE_AUDIT.md).
 
 
-## Admin demo login (v2.1)
+## Admin demo login (v3.1)
 
 From the top navigation, choose **Admin login** or go directly to `/#/admin`.
 The login screen intentionally displays the public demonstration credentials:
@@ -24,15 +24,26 @@ The login screen intentionally displays the public demonstration credentials:
 
 Use **Use these demo credentials** to populate the fields, then select **Sign in to admin console**. A successful login opens the connected products, inventory and order-processing dashboard. **Sign out** revokes the session. All `/api/admin/` data endpoints require a server-side, time-limited session. Demo credentials are public by design and **must not be used to protect production data**.
 
+## Try the customer → business-owner journey
+
+1. **Customer:** Open `/#/store` and add any fictional product to the bag. Continue to `/#/checkout` and use **Fill all fictional test details**, or type the published test details below.
+2. **Demo payment:** Test Visa `4242 4242 4242 4242`, expiry `12/30`, CVC `123`; alternate declined test number `4000 0000 0000 0002`. Real card details are **never accepted, transmitted, charged or stored**. The server only receives an approved/declined symbolic token.
+3. **Confirmation:** A `PP-...` order is created with server-authoritative prices, reserved inventory, a fictional shipping address, and a demo authorization reference.
+4. **Business owner:** Open `/#/admin`, sign in with public demo credentials above, select **Order processing**, and expand the new order. Orders are shared across visitor browsers.
+5. **Label and dispatch:** Select **Generate shipping label**, view/print the prominently invalid demonstration label, enter its generated `DEMO-LBL-...` reference, then select **Mark dispatched**. Wrong references are rejected. Finally select **Mark delivered**.
+6. **Exceptions:** Try out-of-stock checkout, a declined test payment, cancelling before dispatch (inventory restored), or the seeded **On Hold** order (replenish stock and recheck).
+
+See [the journey and limitations](docs/REAL_COMMERCE_JOURNEY.md) for API paths and deployment guidance.
+
 ## Five interactive modules
 
 | Module | What to try | Implementation evidence |
 |---|---|---|
-| **Storefront** | Search, filter, sort, product quick view, shopping bag, persistent quantities, sample checkout | `public/app.js`, `server.js`, `data.js` |
+| **Storefront** | Search, filter, sort, product quick view, shopping bag, persistent quantities, full demo checkout (fictional details + test card), order confirmation | `public/app.js`, `server.js`, `data.js` |
 | **Design studio** | Responsive preview, adjustable design tokens, grid overlay, CSS export, design handoff SVG | `public/styles.css`, `public/assets/design-brief.svg` |
 | **Interaction lab** | jQuery AJAX search with error states, custom plugin, React feature configurator, validation, Bootstrap grid | `public/jquery.characterBudget.js`, `public/react-lab.js` |
 | **Quality bench** | Run six live checks against API, assets, responsive rules, semantics | `public/app.js`, `tests/server.test.js`, `.github/workflows/ci.yml` |
-| **Commerce admin** | Create and edit products, upload optimized product images, manage visibility/SKU/inventory, process orders, cancel and restore stock, reset personal demo | `public/admin.js`, `commerce.js`, `server.js`, `tests/commerce.test.js` |
+| **Commerce admin** | Create and edit products, optimize product images, manage visibility/SKU/inventory, print fictional labels, verify references, dispatch individual orders, cancel with restocking, reset shared demo | `public/admin.js`, `commerce.js`, `server.js`, `tests/commerce.test.js` |
 
 ![Storefront](screenshots/store-desktop.png)
 
@@ -54,7 +65,7 @@ Use **Use these demo credentials** to populate the fields, then select **Sign in
 
 **Version control / automation:** repository-ready source layout, `.gitignore`, and a GitHub Actions workflow running syntax and API tests.
 
-**eCommerce interface:** connected product CRUD, browser-side image optimization, inventory reservations, fulfillment-state validation, product status and sample order history, with no real-payment integration.
+**eCommerce interface:** connected product CRUD, browser-side image optimization, inventory reservations, fictional checkout with browser-only test-card validation and a symbolic payment token, cross-browser order queue, printable sample shipping labels, dispatch validation, and order history. No real payment gateway or shipping API is connected.
 
 **Images:** original local SVG product illustrations, `loading="lazy"` where appropriate, explicit dimensions on product images.
 
@@ -77,8 +88,12 @@ Browser (HTML5 + CSS3 + ES6+ JavaScript + jQuery + React + Bootstrap)
               +-- PATCH/DELETE /api/admin/products/:id
               +-- GET /api/admin/orders
               +-- PATCH /api/admin/orders/:id           [valid fulfillment transitions]
-              +-- POST /api/admin/reset                [restore personal workspace]
-              +-- Isolated JSON workspace per browser (server-side)
+              +-- POST /api/admin/orders/:id/label      [generate sample shipping label]
+              +-- GET  /api/admin/orders/:id/label      [view/print label]
+              +-- POST /api/admin/orders/:id/dispatch   [verify label, mark dispatched]
+              +-- POST /api/admin/orders/:id/recheck    [retry held inventory]
+              +-- POST /api/admin/reset                [reset shared fictional store]
+              +-- Shared JSON fictional store (server-side, across browsers)
               +-- Static assets + JS/CSS (locally served)
 ```
 
@@ -101,14 +116,14 @@ npm test
 npm run check
 ```
 
-There is no `npm install` step and no API keys. Local data is sample-only. Each browser receives a random, HttpOnly cookie identifying an **isolated demo workspace**, which is saved under `.local-data/` (excluded from Git). You can override its directory with `PIXELPROOF_DATA_DIR`. The `PORT` environment variable is respected for deployment. **On Render Free, filesystem storage is ephemeral and may reset after restart/redeploy**; permanent production storage requires a durable database or persistent disk.
+There is no `npm install` step and no API keys. Local data is sample-only. By default the backend uses one **shared fictional storefront and order queue** saved under `.local-data/` (excluded from Git). Set `PIXELPROOF_ISOLATED=true` only for isolated test workspaces. You can override its directory with `PIXELPROOF_DATA_DIR`. The `PORT` environment variable is respected for deployment. **On Render Free, filesystem storage is ephemeral and may reset after restart/redeploy**; permanent production storage requires a durable database or persistent disk.
 
 ## Deploy on Render
 
 1. Use the public GitHub repository `sachintechpro/PixelProof`, and upload the **contents of this updated folder** to its root, replacing matching existing files. Make sure `server.js`, `commerce.js`, `package.json`, `public/`, `.github/`, and `render.yaml` are at the root.
-2. In Render, select **New → Web Service**, and connect your new GitHub repository.
-3. Configure **Runtime: Node**, **Build Command: `echo "no build required"`**, **Start Command: `node server.js`**, **Health Check Path: `/api/health`**, and the **Free** plan if available. Leave the root directory at repository root. Render sets `PORT` automatically.
-4. Deploy. Once healthy, paste the Render URL into the **Live URL** field above and your GitHub repository description.
+2. Open the **existing** PixelProof Render service (`pixelproof-m9ym.onrender.com`) — do not create another service.
+3. In Render **Settings**, set **Root Directory: blank**. This is essential: the repository also contains a stale `PixelProof/` subfolder that would otherwise deploy the older application. Keep **Runtime: Node**, **Build Command: `npm run check`**, **Start Command: `node server.js`**, and **Health Check Path: `/api/health`**.
+4. Save settings and deploy the latest `main` commit. Confirm `GET /api/health` responds with `version: "3.1.0"` before using the new checkout and admin workflow.
 
 Alternatively, Render can read the included `render.yaml` as a Blueprint. Keep the repository contents at the root when using the Blueprint.
 
@@ -127,9 +142,9 @@ If the remote repository already has commits, clone it first and copy the update
 
 ## Important integrity notes
 
-- Sample products and checkout are **demonstrations**. The server validates orders and prices, records a **sample order** in a per-browser JSON workspace, and reserves/restores inventory as needed. It does **not** charge cards, collect payment information, email customers, or create real orders. Sample customer emails are validated but intentionally **not retained**.
-- The admin console is **not a production-secured admin system**. This public review lab intentionally gives each visitor a separate sandbox workspace, with no access to other visitors’ data. For real commerce, add authentication, authorization, a durable database, audit logs, and payment integrations.
-- **Render Free storage is ephemeral.** The per-browser JSON records survive normal page reloads and local process restarts but cannot be promised across free-service redeploys or instance replacement.
+- Sample products and checkout are **demonstrations**. The server validates orders and prices, records a **fictional order** in a shared JSON workspace, and reserves/restores inventory as needed. Checkout accepts ONLY synthetic email domains and test card details. The browser validates card input and sends a symbolic token, never the card number/CVC/expiry. No real charges, emails, labels, carrier shipment or real order fulfillment occur. Synthetic order details are retained for the fake shipping label.
+- The admin console uses a **publicly displayed demonstration login** and is not appropriate for real business data. All visitors interact with the same fictional catalog and order queue, so use only synthetic information. A production service needs private authentication, authorization, a durable database, concurrency-safe transactions, audit controls and licensed payment/carrier integrations.
+- **Render Free storage is ephemeral.** The shared JSON data survives normal page reloads but cannot be promised across redeploys or instance replacement.
 - The design handoff reference is an **original SVG**, not a supplied Photoshop PSD. This project does not assert Photoshop, Illustrator, or Fireworks work experience.
 - The in-browser checks do **not** prove testing in Firefox, Safari, or Edge. See the [manual QA plan](docs/MANUAL_QA.md) for an honest cross-browser test matrix.
 - Preferred but unimplemented platforms (WordPress, Shopify, BigCommerce, Magento, PHP, MySQL) are intentionally not presented as integrated systems.

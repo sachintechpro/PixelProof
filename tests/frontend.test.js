@@ -18,7 +18,7 @@ test('demo admin login displays public credentials and a sign-in form',()=>{
 });
 test('website loads admin before router and exposes the commerce route',()=>{
   assert.ok(pageHTML.indexOf('/admin.js')<pageHTML.indexOf('/app.js'));
-  assert.match(appSource,/\['home','store','studio','lab','quality','admin'\]/);
+  assert.match(appSource,/\['home','store','studio','lab','quality','admin','checkout','confirmation'\]/);
   assert.match(appSource,/PixelProofAdmin\.render\(\)/);
   assert.match(appSource,/PixelProofAdmin\.mount\(\)/);
 });

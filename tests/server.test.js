@@ -1,5 +1,5 @@
 'use strict';
-const test = require('node:test');const assert = require('node:assert/strict');const http = require('node:http');const {handler}=require('../server');
+const test = require('node:test');const assert = require('node:assert/strict');const http = require('node:http');process.env.PIXELPROOF_ISOLATED='true';const {handler}=require('../server');
 let server,base;
 test.before(async()=>{server=http.createServer(handler);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;});
 test.after(async()=>{await new Promise(resolve=>server.close(resolve));});

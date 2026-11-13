@@ -57,3 +57,84 @@
 .admin-login-footnote{font-size:10px;line-height:1.7;color:#98a69a;margin-top:19px}.admin-intro-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.admin-signed-in{font-size:10px;color:#52785b;font-weight:850;padding:9px}.admin-signed-in::first-letter{color:#71b776}
 @media(max-width:900px){.admin-login-shell{grid-template-columns:1fr}.admin-login-story{min-height:315px;padding:32px}.admin-login-hero h1{font-size:35px}.admin-login-mark{margin-bottom:17px}.admin-login-hero p{margin-bottom:18px}.admin-login-footer{margin-top:22px}.admin-login-form-side{padding:36px 38px}}
 @media(max-width:540px){.admin-login-page{padding-top:20px;padding-bottom:30px}.admin-login-story{padding:27px;min-height:320px}.admin-login-form-side{padding:30px 22px}.admin-login-form-side h2{font-size:31px}.admin-login-story::after{display:none}.admin-login-hero h1{font-size:32px}.admin-login-kicker{font-size:9px}.admin-intro-actions{align-items:stretch}}
+
+/* PixelProof v3 — checkout + fictional order-to-dispatch workflow */
+.checkout-page .page-header{padding-top:23px}.checkout-page .page-header h1{font-size:clamp(36px,4vw,60px)}
+.checkout-breadcrumb{display:flex;gap:20px;justify-content:space-between;align-items:center;padding-top:28px;color:#809085;font-size:10px;letter-spacing:1.3px;font-weight:800}
+.checkout-breadcrumb button{background:transparent;border:0;padding:0}
+.checkout-security{border:1px solid #e4d4b4;background:#fff8e8;border-radius:12px;padding:16px 20px;color:#745426;font-size:13px;margin-bottom:22px}.checkout-security b{margin-right:12px;color:#553914}
+.checkout-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(295px,.72fr);gap:22px;align-items:start}
+.checkout-main,.checkout-summary{background:#fff;border:1px solid #e1e6df;border-radius:20px;box-shadow:var(--shadow)}
+.checkout-customer-form{padding:30px}.checkout-group{padding-bottom:28px;margin-bottom:27px;border-bottom:1px solid #e6ebe5}.checkout-group:last-of-type{border-bottom:0;margin-bottom:8px}
+.checkout-group h2{font-size:23px;margin:9px 0 22px}.checkout-fields{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.checkout-fields label{font-size:12px;font-weight:750;color:#3e5146;display:flex;flex-direction:column;gap:7px}
+.checkout-fields .span-2{grid-column:1/-1}.checkout-fields input{width:100%;background:#fbfcfa;border:1px solid #d5dfd3;border-radius:10px;min-height:44px;padding:12px 13px;outline:none;color:var(--ink)}
+.checkout-fields input:focus{border-color:#8aaf6f;box-shadow:0 0 0 3px #c9e1b875}.checkout-fields input:read-only{background:#f0f3ed;color:#66756c}
+.checkout-help,.checkout-no-storage{font-size:12px;line-height:1.75}.checkout-help code{background:#f0f5eb;border-radius:5px;padding:2px 5px;color:#345438;font-weight:700}
+.checkout-no-storage{padding:12px 15px;background:#eff5e9;border-radius:10px;margin-top:14px;margin-bottom:0}
+.checkout-form-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.checkout-error:not(:empty){background:#fff0ee;color:#9f3f37;border:1px solid #eed0cc;padding:12px;border-radius:10px;margin-bottom:16px;font-size:12px}
+.checkout-summary{padding:28px;position:sticky;top:102px}.checkout-summary h3{font-size:26px;margin:11px 0 25px}.checkout-product{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #e6ebe5}.checkout-product img{height:67px;width:67px;object-fit:contain;border-radius:10px;background:#eef2e9}.checkout-product div{flex:1;min-width:0}.checkout-product b{font-size:12px}.checkout-product small{display:block;color:#88988c;margin-top:3px}.checkout-product strong{font-size:13px}.checkout-totals{margin:25px 0}.checkout-totals>div{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;font-size:13px}.checkout-totals .grand-total{padding-top:16px;border-top:1px solid #d7dfd4;font-weight:800;font-size:17px;margin-top:18px}.checkout-assurance{line-height:2.1;font-size:12px;font-weight:700;color:#57715b;background:#f1f6eb;padding:18px;border-radius:12px}
+.confirmation-page{padding:65px 0}.confirmation-card{max-width:780px;margin:10px auto;background:#fff;border:1px solid #dee8dc;border-radius:25px;padding:42px 52px;text-align:center}.confirmation-card h1{font-size:54px;margin:15px 0}.confirmation-card p{max-width:550px;margin:0 auto 20px}.confirmation-tick{margin:30px auto 0;display:grid;place-content:center;width:66px;height:66px;background:#e1f0ca;border-radius:50%;font-size:33px;color:#386b46;font-weight:800}.confirmation-number{background:#f2f5ed;padding:18px;border-radius:13px;font:800 23px ui-monospace,SFMono-Regular,monospace;letter-spacing:.6px;margin:25px 0}.confirmation-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:25px;text-align:left}.confirmation-facts>div{padding:16px;border:1px solid #e0e7dd;border-radius:10px}.confirmation-facts span{display:block;color:#79897e;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}.confirmation-facts b{font-size:12px;overflow-wrap:anywhere}.confirmation-actions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.admin-order-actions{display:flex;align-items:center;gap:14px}.admin-order-detail-v3{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);gap:30px}.admin-order-destination,.admin-payment-info{border:1px solid #e3e9df;border-radius:11px;background:#f8faf6;padding:16px 18px;margin-top:19px}.admin-order-destination b,.admin-payment-info b{font-size:12px}.admin-order-destination p,.admin-payment-info p{font-size:12px;line-height:1.65;margin:8px 0}.admin-order-destination small,.admin-payment-info small{color:#758479;font-size:11px}.admin-fulfillment-actions{display:flex;flex-direction:column;gap:12px;align-items:flex-start}.admin-label-card{background:#ecf4e4;padding:15px 17px;border-radius:12px;width:100%;border:1px solid #d4e4c6}.admin-label-card>b{font:800 16px ui-monospace,monospace;overflow-wrap:anywhere;display:block;margin:12px 0}.admin-label-card p{font-size:11px;margin:8px 0 12px}.admin-dispatch-control{border:1px dashed #b9cbb9;padding:15px;width:100%;border-radius:12px}.admin-dispatch-control label{display:block;font-size:12px;font-weight:800;margin-bottom:8px}.admin-dispatch-control input{border:1px solid #c8d7c8;border-radius:8px;padding:11px 12px;width:100%;margin-bottom:12px;font:600 12px monospace}.admin-warning{border-left:3px solid #c48c4b;background:#fff4df;padding:10px 15px;font-size:12px}
+@media(max-width:920px){.checkout-layout,.admin-order-detail-v3{grid-template-columns:1fr}.checkout-summary{position:static}.checkout-page .page-header{padding-top:24px}}
+@media(max-width:600px){.checkout-breadcrumb{flex-wrap:wrap}.checkout-customer-form,.checkout-summary{padding:19px}.checkout-fields,.confirmation-facts{grid-template-columns:1fr}.checkout-fields .span-2{grid-column:auto}.checkout-form-actions>.button{width:100%}.confirmation-card{padding:25px 19px}.confirmation-card h1{font-size:39px}.admin-order-actions{flex-wrap:wrap}}
+
+/* Mobile/browser QA: Bootstrap's .modal is display:none by default.
+   Product quick-view is a custom modal controlled by PixelProof, so override it. */
+.overlay .modal { display:block; }
+
+/* PixelProof iPhone/iPad usability: dynamic viewport, readable form entry, and visible actions. */
+@supports (height: 100dvh) {
+  .drawer { height: 100dvh; }
+  .overlay .modal { max-height: calc(100dvh - 24px); }
+  .admin-modal { max-height: calc(100dvh - 24px); }
+}
+@media (max-width: 800px) {
+  .nav-wrap.open { max-height: calc(100dvh - 70px); overflow-y: auto; }
+}
+@media (max-width: 700px) {
+  /* The desktop product table becomes stacked cards; Edit must remain onscreen. */
+  .admin-table-scroll { overflow: visible; border: 0; border-radius: 0; }
+  .admin-table { display: block; width: 100%; min-width: 0; }
+  .admin-table thead { display: none; }
+  .admin-table tbody { display: grid; gap: 12px; }
+  .admin-table tbody tr { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; padding: 14px; background: #fff; border: 1px solid #e7ece5; border-radius: 12px; }
+  .admin-table td { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-width: 0; overflow-wrap: anywhere; padding: 0; border-bottom: 0 !important; }
+  .admin-table tbody tr:hover td { background: transparent; }
+  .admin-table td:first-child { grid-column: 1/-1; border-bottom: 1px solid #edf1ed !important; padding-bottom: 12px; }
+  .admin-product-cell { min-width: 0; width: 100%; }
+  .admin-table td:nth-child(2)::before { content:'CATEGORY'; }
+  .admin-table td:nth-child(3)::before { content:'PRICE'; }
+  .admin-table td:nth-child(4)::before { content:'INVENTORY'; }
+  .admin-table td:nth-child(5)::before { content:'VISIBILITY'; }
+  .admin-table td:nth-child(n+2):nth-child(-n+5)::before { display: block; color: #819684; font-size: 10px; font-weight: 800; letter-spacing: .7px; }
+  .admin-table td:last-child { grid-column: 1/-1; }
+  .admin-row-button { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; font-size: 13px; }
+}
+@media (max-width: 600px) {
+  /* iOS Safari zooms forms with smaller-than-16px text while typing. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  textarea, select { font-size: 16px !important; }
+  .icon-btn, .modal-close { min-height: 44px; min-width: 44px; }
+  .product-name { min-height: 40px; display: inline-flex; align-items: center; text-align: left; }
+  .footer-links a, .footer-links button { display: inline-flex; align-items: center; min-height: 44px; padding: 9px 2px; }
+  .checkout-breadcrumb .link-inline { display: inline-flex; align-items: center; min-height: 44px; }
+  .cart-item { grid-template-columns: 68px minmax(0,1fr); gap: 10px; }
+  .cart-item img { width: 68px; height: 68px; }
+  .qty-control { flex-wrap: wrap; gap: 8px; }
+  .qty-control button { width: 44px; height: 44px; }
+  .qty-control strong { flex-basis: 100%; margin-left: 0 !important; }
+  .drawer-body { padding: 16px; overscroll-behavior: contain; }
+  .drawer-bottom { padding: 16px 16px max(16px,env(safe-area-inset-bottom)); }
+  .admin-fulfillment button, .admin-cancel, .admin-danger, .admin-x { min-height: 44px; }
+  .admin-login-page input, .admin-form-main input, .admin-form-side select { min-height: 44px; }
+  #toast-region { left: 12px; right: 12px; bottom: max(14px,env(safe-area-inset-bottom)); justify-items: center; pointer-events: none; }
+  #toast-region .toast-message { max-width: min(340px,100%); }
+}
+
+/* Keep all three admin navigation actions visible instead of clipping a tab-strip on iPhone. */
+@media (max-width: 700px) {
+  .admin-tabs { display: grid; grid-template-columns: 1fr; gap: 6px; overflow: visible; padding: 12px; }
+  .admin-tabs button { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid #e2e9df; border-radius: 8px; text-align: left; white-space: normal; }
+  .admin-tabs button.active { border-color: #94b791; background: #edf5e9; }
+}
