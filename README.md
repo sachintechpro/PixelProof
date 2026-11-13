@@ -3,13 +3,13 @@
 
 **Built to the pixel. Proven in the browser.**
 
-Live Demo - https://pixelproof-m9ym.onrender.com/
+**[Launch PixelProof — Live Demo](https://pixelproof-m9ym.onrender.com/)**
 
 PixelProof is a responsive, interactive engineering showcase for a frontend developer role. It is not a collection of static screenshots or a slide deck: employers can use a working storefront, operate a connected commerce administration console, modify CSS on screen, interact with a real React component, exercise a jQuery API flow, and execute browser smoke checks.
 
 ![PixelProof overview](screenshots/home-desktop.png)
 
-> **Live URL:** Add your Render deployment URL here after publishing.
+> **Live application:** [Launch PixelProof on Render](https://pixelproof-m9ym.onrender.com/)
 >
 > **Source review:** See [Five-minute review guide](docs/REVIEW_GUIDE.md).
 
